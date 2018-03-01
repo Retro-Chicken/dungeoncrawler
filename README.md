@@ -23,7 +23,7 @@ $ export LD_LIBRARY_PATH="sfml/lib-linux" && builds/linux-build
 *Note: For linux systems SFML's dependencies must first be installed. The easiest way to do this is to install SFML from the package manager to auto-install dependencies. On Ubuntu this is* `sudo apt-get install libsfml-dev`*.*
 
 ### Windows ###
-For windows system you will need to install `MinGW` and make sure you have `g++` and `mingw32-make` installed. Upon doing this you can build and run the program by executing in cmd
+For windows systems you will need to install `MinGW` (32 bit) and make sure you have `g++` and `mingw32-make` installed. Upon doing this you can build and run the program by executing in cmd
 ```
 $ cd <project-directory>
 $ run-windows.bat
