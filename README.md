@@ -37,6 +37,7 @@ This will build the application to `<project-directory>/bin/windows/windows-buil
 ```
 $ start bin/windows/windows-build
 ```
+*Note: Users who have* `MinGW` * 64 bit installed will need to execute* `$ run-windows64.bat` *instead of* `run-windows.bat`*.*
 
 ### OSX ###
 To run the program on Mac OSX you will first need to install the SFML frameworks and dependencies. To do this go to the [SFML downloads](https://www.sfml-dev.org/download.php) page and install the Mac OSX binaries. To get the libraries extract that download and move the contents of `extlibs` and `Frameworks` into `/Library/Frameworks`. You can then build and run the program by executing
