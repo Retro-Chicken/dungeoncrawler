@@ -14,20 +14,21 @@ SOURCES = $(wildcard $(SRC_PATH)/*.cpp)
 OBJ_DIR := $(TARGET_PATH)/objects
 OBJECTS := $(SOURCES:$(SRC_PATH)/%.cpp=$(OBJ_DIR)/%.o)
 
-.PHONY: all build
+.SECONDEXPANSION:
+.PRECIOUS: %./stamp
+.PHONY: all
 
 # Linking commands
-all: build $(TARGET_PATH)/$(TARGET)
+all: $(TARGET_PATH)/.stamp $(OBJ_DIR)/.stamp $(TARGET_PATH)/$(TARGET)
 
-build:
-	-mkdir $(subst /,\,$(TARGET_PATH))
-	-mkdir $(subst /,\,$(OBJ_DIR))
-#--------------------------------------- END OF LINKING -------------------------------------------------
-# Compilation commands
-$(TARGET_PATH)/$(TARGET): $(OBJECTS)
+#Directory creation handling with stamps
+%/.stamp:
 	-mkdir $(subst /,\,$(@D))
+	type nul > $@
+
+# Compilation commands (Compiles all files in source directory)
+$(TARGET_PATH)/$(TARGET): $(OBJECTS) $$(@D)/.stamp
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 
-$(OBJ_DIR)/%.o: $(SRC_PATH)/%.cpp
-	-mkdir $(subst /,\,$(@D))
+$(OBJ_DIR)/%.o: $(SRC_PATH)/%.cpp $$(@D)/.stamp
 	$(CXX) -c $< -o $@ -I$(SFML_INCLUDE)

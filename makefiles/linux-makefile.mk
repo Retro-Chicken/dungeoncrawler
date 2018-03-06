@@ -14,21 +14,22 @@ SOURCES = $(wildcard $(SRC_PATH)/*.cpp)
 OBJ_DIR := $(TARGET_PATH)/objects
 OBJECTS := $(SOURCES:$(SRC_PATH)/%.cpp=$(OBJ_DIR)/%.o)
 
-.PHONY: all build
+.SECONDEXPANSION:
+.PRECIOUS: %./stamp
+.PHONY: all
 
 # Linking commands
-all: build $(TARGET_PATH)/$(TARGET)
+all: $(TARGET_PATH)/.stamp $(OBJ_DIR)/.stamp $(TARGET_PATH)/$(TARGET)
 	export LD_LIBRARY_PATH="sfml/lib-linux"
 
-build:
-	-mkdir -p $(TARGET_PATH)
-	-mkdir -p $(OBJ_DIR)
-#--------------------------------------- END OF LINKING -------------------------------------------------
-# Compilation commands
-$(TARGET_PATH)/$(TARGET): $(OBJECTS)
+#Directory creation handling with stamps
+%/.stamp:
 	-mkdir -p $(@D)
+	touch $@
+
+# Compilation commands (Compiles all files in source directory)
+$(TARGET_PATH)/$(TARGET): $(OBJECTS) $$(@D)/.stamp
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 
-$(OBJ_DIR)/%.o: $(SRC_PATH)/%.cpp
-	-mkdir -p $(@D)
+$(OBJ_DIR)/%.o: $(SRC_PATH)/%.cpp $$(@D)/.stamp
 	$(CXX) -c $< -o $@ -I$(SFML_INCLUDE)
