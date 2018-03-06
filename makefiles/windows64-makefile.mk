@@ -28,6 +28,6 @@ $(TARGET_PATH)/$(TARGET): $(OBJECTS)
 	-mkdir $(subst /,\,$(@D))
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 
-$(OBJ_DIR)/%.o: %.cpp
+$(OBJ_DIR)/%.o: $(SRC_PATH)/%.cpp
 	-mkdir $(subst /,\,$(@D))
 	$(CXX) -c $< -o $@ -I$(SFML_INCLUDE)

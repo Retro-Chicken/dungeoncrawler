@@ -27,6 +27,6 @@ $(TARGET_PATH)/$(TARGET): $(OBJECTS)
 	-mkdir -p $(@D)
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 
-$(OBJ_DIR)/%.o: %.cpp
+$(OBJ_DIR)/%.o: $(SRC_PATH)/%.cpp
 	-mkdir -p $(@D)
 	$(CXX) -c $< -o $@ -I$(SFML_INCLUDE)
