@@ -14,11 +14,11 @@ $ ./run-linux.sh
 To solely build the program simply execute
 ```
 $ cd <project-directory>
-$ make -f makefile.mk linux-build
+$ make -f makefiles/linux-makefile.mk all
 ```
 This will build the application to `<project-directory>/bin/linux/linux-build` which can be run using
 ```
-$ export LD_LIBRARY_PATH="sfml/lib-linux" && bin/linux/linux-build
+$ bin/linux/linux-build
 ```
 *Note: For linux systems SFML's dependencies must first be installed. The easiest way to do this is to install SFML from the package manager to auto-install dependencies. On Ubuntu this is* `sudo apt-get install libsfml-dev`*.*
 
@@ -31,12 +31,13 @@ $ run-windows.bat
 To solely build the program simply execute
 ```
 $ cd <project-directory>
-$ mingw32-make -f makefile.mk windows-build
+$ mingw32-make -f makefiles/windows32-makefile.mk all
 ```
-This will build the application to `<project-directory>/bin/windows/windows-build` which can be run using
+This will build the application to `<project-directory>/bin/windows/windows32-build` which can be run using
 ```
-$ start bin/windows/windows-build
+$ start bin/windows/windows32-build
 ```
+*Note: Users who have* `MinGW` *64 bit installed will need to execute* `$ run-windows64.bat` *instead of* `run-windows.bat`*.*
 
 ### OSX ###
 To run the program on Mac OSX you will first need to install the SFML frameworks and dependencies. To do this go to the [SFML downloads](https://www.sfml-dev.org/download.php) page and install the Mac OSX binaries. To get the libraries extract that download and move the contents of `extlibs` and `Frameworks` into `/Library/Frameworks`. You can then build and run the program by executing
@@ -47,7 +48,7 @@ $ ./run-mac.sh
 To solely build the program simply execute
 ```
 $ cd <project-directory>
-$ make -f makefile.mk mac-build
+$ make -f makefiles/mac-makefile.mk all
 ```
 This will build the application to `<project-directory>/bin/mac/mac-build` which can be run using
 ```
