@@ -11,7 +11,7 @@ CXX := clang++
 LDFLAGS := $(SFML_ACTIVE_FRAMEWORKS)
 SOURCES = $(wildcard $(SRC_PATH)/*.cpp)
 OBJ_DIR := $(TARGET_PATH)/objects
-OBJECTS := $(SOURCES:%.cpp=$(OBJ_DIR)/%.o)
+OBJECTS := $(SOURCES:$(SRC_PATH)/%.cpp=$(OBJ_DIR)/%.o)
 
 .PHONY: all build
 

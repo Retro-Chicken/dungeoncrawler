@@ -12,7 +12,7 @@ CXX := g++
 LDFLAGS := -L$(SFML_LIB) $(SFML_ACTIVE_MODULES)
 SOURCES = $(wildcard $(SRC_PATH)/*.cpp)
 OBJ_DIR := $(TARGET_PATH)/objects
-OBJECTS := $(SOURCES:%.cpp=$(OBJ_DIR)/%.o)
+OBJECTS := $(SOURCES:$(SRC_PATH)/%.cpp=$(OBJ_DIR)/%.o)
 
 .PHONY: all build
 
@@ -28,6 +28,6 @@ $(TARGET_PATH)/$(TARGET): $(OBJECTS)
 	-mkdir $(subst /,\,$(@D))
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 
-$(OBJ_DIR)/%.o: %.cpp
+$(OBJ_DIR)/%.o: $(SRC_PATH)/%.cpp
 	-mkdir $(subst /,\,$(@D))
 	$(CXX) -c $< -o $@ -I$(SFML_INCLUDE)
