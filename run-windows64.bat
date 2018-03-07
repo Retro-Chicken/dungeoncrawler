@@ -1,2 +1,2 @@
-mingw32-make -f makefile.mk windows-build64
-start bin/windows64/windows-build64
+mingw32-make -f makefiles/windows64-makefile.mk all
+start bin/windows64/windows64-build

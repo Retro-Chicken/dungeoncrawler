@@ -1,4 +1,4 @@
 #!/bin/sh
 
-make -f makefile.mk mac-build
+make -f makefiles/mac-makefile.mk all
 bin/mac/mac-build
