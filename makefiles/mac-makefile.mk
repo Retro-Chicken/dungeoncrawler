@@ -9,12 +9,13 @@ SFML_ACTIVE_FRAMEWORKS := -framework sfml-system -framework sfml-graphics -frame
 
 CXX := clang++
 LDFLAGS := $(SFML_ACTIVE_FRAMEWORKS)
-SOURCES = $(wildcard $(SRC_PATH)/*.cpp)
+rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+SOURCES := $(call rwildcard,,*.cpp)
 OBJ_DIR := $(TARGET_PATH)/objects
 OBJECTS := $(SOURCES:$(SRC_PATH)/%.cpp=$(OBJ_DIR)/%.o)
 
 .SECONDEXPANSION:
-.PRECIOUS: %./stamp
+.PRECIOUS: %/.stamp
 .PHONY: all
 
 # Linking commands

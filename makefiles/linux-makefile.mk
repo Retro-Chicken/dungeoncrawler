@@ -10,12 +10,13 @@ SFML_ACTIVE_MODULES := -lsfml-graphics -lsfml-window -lsfml-system
 
 CXX := g++
 LDFLAGS := -L$(SFML_LIB) $(SFML_ACTIVE_MODULES)
-SOURCES = $(wildcard $(SRC_PATH)/*.cpp)
+rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+SOURCES := $(call rwildcard,,*.cpp)
 OBJ_DIR := $(TARGET_PATH)/objects
 OBJECTS := $(SOURCES:$(SRC_PATH)/%.cpp=$(OBJ_DIR)/%.o)
 
 .SECONDEXPANSION:
-.PRECIOUS: %./stamp
+.PRECIOUS: %/.stamp
 .PHONY: all
 
 # Linking commands
