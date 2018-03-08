@@ -1,17 +1,14 @@
+#ifndef GUIBUTTON_H
+#define GUIBUTTON_H
+
 #include "UIElement.h"
 #include <functional>
 #include <SFML\Graphics.hpp>
 #include <string>
 
-#ifndef GUIBUTTON_H
-#define GUIBUTTON_H
-
-using namespace std;
-
-class GUIButton : public UIElement
-{
+class GUIButton : public UIElement {
 public:
-	GUIButton(const function<void()>& on__Click, sf::Vector2f& position, sf::Vector2f& size, sf::Color stateColors[3], sf::Text text);
+	GUIButton(const std::function<void()>& on__Click, sf::Vector2f& position, sf::Vector2f& size, sf::Color stateColors[3], sf::Text text);
 	GUIButton();
 	~GUIButton();
 
@@ -26,7 +23,7 @@ private:
 	enum ButtonState { UNACTIVE =  0, HIGHLIGHTED = 1, ACTIVE = 2 };
 	ButtonState currentState;
 
-	function<void()> on_Click;
+	std::function<void()> on_Click;
 	sf::Color stateColors[3];
 	sf::RectangleShape button;
 

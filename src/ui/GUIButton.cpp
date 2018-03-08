@@ -1,8 +1,9 @@
 #include "GUIButton.h"
-
 #include <Windows.h>
 
-GUIButton::GUIButton(const function<void()>& on__Click, sf::Vector2f & position, sf::Vector2f & size, sf::Color stateColors[3], sf::Text text) :
+using namespace std;
+
+GUIButton::GUIButton(const function<void()>& on__Click, sf::Vector2f& position, sf::Vector2f& size, sf::Color stateColors[3], sf::Text text) :
 	on_Click(on__Click),
 	button(size)
 {
@@ -24,7 +25,8 @@ void GUIButton::Update(float deltaTime) {
 }
 
 void GUIButton::Draw(sf::RenderWindow & window) {
-	setState(sf::Mouse::getPosition(window), window);
+	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+	setState(mousePos, window);
 	button.setFillColor(stateColors[currentState]);
 	window.draw(button);
 	window.draw(text);

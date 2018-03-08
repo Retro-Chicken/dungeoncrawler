@@ -1,3 +1,6 @@
+#ifndef TEST_SCENE_H
+#define TEST_SCENE_H
+
 #include "scenes/Scene.h"
 #include <functional>
 #include "ui/GUIButton.h"
@@ -9,7 +12,6 @@ public:
 
 private:
 	GUIButton button;
-	//void buttonFunc();
 
 	void Update(float deltaTime);
 
@@ -17,3 +19,5 @@ private:
 
 	void Reset();
 };
+
+#endif

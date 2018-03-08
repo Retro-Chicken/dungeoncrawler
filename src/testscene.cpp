@@ -1,16 +1,17 @@
 #include "testscene.h"
+#include <iostream>
 
 static sf::Color buttonColor[] = { sf::Color(100, 10, 10), sf::Color(75, 10, 10), sf::Color(50, 10, 10) };
 
-void buttonFunc();
-
 testscene::testscene() {
 	sf::Text buttonText = sf::Text("Test Button", config::MAIN_FONT, 60);
-	buttonText.setScale(sf::Vector2f(0.05, 0.05));
-	button = GUIButton(&buttonFunc, sf::Vector2f(320 - 50 - 5, 192 - 20 - 5), sf::Vector2f(50, 20), buttonColor, buttonText);
+	buttonText.setScale(sf::Vector2f(0.5, 0.5));
+	sf::Vector2f position(150, 100);
+	sf::Vector2f size(500, 200);
+	button = GUIButton([]() { cout << "Button Clicked." << endl; }, position, size, buttonColor, buttonText);
 }
 
-void buttonFunc() {
+testscene::~testscene() {
 
 }
 

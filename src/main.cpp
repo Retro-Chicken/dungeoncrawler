@@ -6,7 +6,7 @@
 
 
 int main() {
-	config::MAIN_FONT.loadFromFile("../resources/fonts/arial.ttf");
+	config::MAIN_FONT.loadFromFile("resources/fonts/arial.ttf");
 
 	sf::RenderWindow window(sf::VideoMode(800, 480), "Dungeon Crawler");
 
