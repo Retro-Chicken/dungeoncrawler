@@ -3,10 +3,12 @@
 #include <functional>
 #include "../config.h"
 
+#ifndef SCENE_H
+#define SCENE_H
+
 using namespace std;
 
-class Scene
-{
+class Scene {
 public:
 	Scene();
 	~Scene();
@@ -19,3 +21,5 @@ protected:
 	void ResizeView(const sf::RenderWindow& window, sf::View& view);
 	sf::Vector2u oldWindowSize;
 };
+
+#endif

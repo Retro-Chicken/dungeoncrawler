@@ -10,6 +10,6 @@ namespace config {
 	extern sf::Font MAIN_FONT;
 
 	bool load_config_file();
-}
+};
 
 #endif

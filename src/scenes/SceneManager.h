@@ -1,5 +1,8 @@
 #include "Scene.h"
 
+#ifndef SCENE_MANAGER_H
+#define SCENE_MANAGER_H
+
 class SceneManager {
 public:
 	SceneManager(std::vector<Scene*> scenes);
@@ -16,3 +19,5 @@ public:
 
 	static std::vector<Scene*> scenes;
 };
+
+#endif

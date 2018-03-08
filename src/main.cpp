@@ -1,24 +1,24 @@
 #include <SFML\Graphics.hpp>
 #include <iostream>
 #include "scenes/SceneManager.h"
+#include "testscene.h"
+#include "config.h"
 
 
 int main() {
+	config::MAIN_FONT.loadFromFile("../resources/fonts/arial.ttf");
+
 	sf::RenderWindow window(sf::VideoMode(800, 480), "Dungeon Crawler");
 
 	float deltaTime = 0.0f;
 	sf::Clock clock;
 
 	srand(time(NULL));
-	SceneManager manager;
+	testscene test;
+	std::vector<Scene*> scenes = { &test };
+	SceneManager manager(scenes);
 
 	while (window.isOpen()) {
-		sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
 		deltaTime = clock.restart().asSeconds();
 
 		window.clear();
