@@ -3,7 +3,7 @@
 
 #include "UIElement.h"
 #include <functional>
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <string>
 
 class GUIButton : public UIElement {

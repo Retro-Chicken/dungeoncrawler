@@ -1,7 +1,7 @@
 #ifndef UIELEMENT_H
 #define UIELEMENT_H
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 class UIElement
 {

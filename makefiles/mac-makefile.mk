@@ -8,6 +8,7 @@ SFML_INCLUDE := sfml/include
 SFML_ACTIVE_FRAMEWORKS := -framework sfml-system -framework sfml-graphics -framework sfml-window
 
 CXX := clang++
+CFLAGS := -std=c++11
 LDFLAGS := $(SFML_ACTIVE_FRAMEWORKS)
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 SOURCES := $(call rwildcard,,*.cpp)
@@ -28,7 +29,7 @@ all: $(TARGET_PATH)/.stamp $(OBJ_DIR)/.stamp $(TARGET_PATH)/$(TARGET)
 
 # Compilation commands (Compiles all files in source directory)
 $(TARGET_PATH)/$(TARGET): $(OBJECTS) $$(@D)/.stamp
-	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
+	$(CXX) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_PATH)/%.cpp $$(@D)/.stamp
-	$(CXX) -c $< -o $@ -I$(SFML_INCLUDE)
+	$(CXX) $(CFLAGS) -c $< -o $@ -I$(SFML_INCLUDE)
