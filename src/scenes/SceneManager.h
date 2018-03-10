@@ -11,11 +11,11 @@ public:
 
 	static int ACTIVE_SCENE;
 
-	static void setActiveScene(int id) { ACTIVE_SCENE = id; scenes[id]->Reset(); }
+	static void setActiveScene(int id) { ACTIVE_SCENE = id; scenes[id]->reset(); }
 	void addScene(Scene* scene) { scenes.push_back(scene); }
 
-	void Draw(sf::RenderWindow& window);
-	void Update(float deltaTime);
+	void draw(sf::RenderWindow& window);
+	void update(float deltaTime);
 
 	static std::vector<Scene*> scenes;
 };

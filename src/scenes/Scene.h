@@ -13,12 +13,12 @@ public:
 	Scene();
 	~Scene();
 
-	virtual void Update(float deltaTime) = 0;
-	virtual void Draw(sf::RenderWindow& window) = 0;
-	virtual void Reset() = 0;
+	virtual void update(float deltaTime) = 0;
+	virtual void draw(sf::RenderWindow& window) = 0;
+	virtual void reset() = 0;
 
 protected:
-	void ResizeView(const sf::RenderWindow& window, sf::View& view);
+	void resizeView(const sf::RenderWindow& window, sf::View& view);
 	sf::Vector2u oldWindowSize;
 };
 

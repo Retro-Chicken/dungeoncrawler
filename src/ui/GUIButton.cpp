@@ -21,10 +21,10 @@ GUIButton::GUIButton() {
 GUIButton::~GUIButton() {
 }
 
-void GUIButton::Update(float deltaTime) {
+void GUIButton::update(float deltaTime) {
 }
 
-void GUIButton::Draw(sf::RenderWindow & window) {
+void GUIButton::draw(sf::RenderWindow & window) {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	setState(mousePos, window);
 	button.setFillColor(stateColors[currentState]);
@@ -32,7 +32,7 @@ void GUIButton::Draw(sf::RenderWindow & window) {
 	window.draw(text);
 }
 
-void GUIButton::RegisterEvent(sf::Event evnt) {
+void GUIButton::registerEvent(sf::Event evnt) {
 	switch (evnt.type) {
 	case sf::Event::MouseButtonReleased:
 		if ((currentState == HIGHLIGHTED || currentState == ACTIVE) && evnt.mouseButton.button == sf::Mouse::Left) {

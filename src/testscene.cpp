@@ -1,4 +1,5 @@
 #include "testscene.h"
+#include "config.h"
 #include <iostream>
 
 static sf::Color buttonColor[] = { sf::Color(100, 10, 10), sf::Color(75, 10, 10), sf::Color(50, 10, 10) };
@@ -15,20 +16,16 @@ testscene::~testscene() {
 
 }
 
-void testscene::Update(float deltaTime) {
-	button.Update(deltaTime);
+void testscene::update(float deltaTime) {
+	for(int i = 0; i < config::windowEvents.size(); i++)
+		button.registerEvent(config::windowEvents[i]);
+	button.update(deltaTime);
 }
 
-void testscene::Draw(sf::RenderWindow& window) {
-	sf::Event event;
-    while (window.pollEvent(event)) {
-		button.RegisterEvent(event);
-        if (event.type == sf::Event::Closed)
-            window.close();
-    }
-	button.Draw(window);
+void testscene::draw(sf::RenderWindow& window) {
+	button.draw(window);
 }
 
-void testscene::Reset() {
+void testscene::reset() {
 
 }

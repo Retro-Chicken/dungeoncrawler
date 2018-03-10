@@ -9,10 +9,10 @@ public:
 	UIElement();
 	~UIElement();
 
-	virtual void Update(float deltaTime) = 0;
-	virtual void Draw(sf::RenderWindow& window) = 0;
+	virtual void update(float deltaTime) = 0;
+	virtual void draw(sf::RenderWindow& window) = 0;
 
-	virtual void RegisterEvent(sf::Event evnt) = 0;
+	virtual void registerEvent(sf::Event evnt) = 0;
 };
 
 #endif

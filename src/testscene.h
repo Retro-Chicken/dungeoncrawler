@@ -13,11 +13,11 @@ public:
 private:
 	GUIButton button;
 
-	void Update(float deltaTime);
+	void update(float deltaTime);
 
-	void Draw(sf::RenderWindow& window);
+	void draw(sf::RenderWindow& window);
 
-	void Reset();
+	void reset();
 };
 
 #endif

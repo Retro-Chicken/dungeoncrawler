@@ -13,9 +13,9 @@ public:
 	~GUIButton();
 
 	void onClick() { on_Click(); }
-	void Update(float deltaTime);
-	void Draw(sf::RenderWindow& window);
-	void RegisterEvent(sf::Event evnt);
+	void update(float deltaTime);
+	void draw(sf::RenderWindow& window);
+	void registerEvent(sf::Event evnt);
 
 	void setPosition(sf::Vector2f& position);
 

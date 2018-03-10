@@ -16,12 +16,12 @@ SceneManager::SceneManager() {
 SceneManager::~SceneManager() {
 }
 
-void SceneManager::Draw(sf::RenderWindow & window) {
+void SceneManager::draw(sf::RenderWindow & window) {
 	if(ACTIVE_SCENE >= 0)
-		scenes[ACTIVE_SCENE]->Draw(window);
+		scenes[ACTIVE_SCENE]->draw(window);
 }
 
-void SceneManager::Update(float deltaTime) {
+void SceneManager::update(float deltaTime) {
 	if(ACTIVE_SCENE >= 0)
-		scenes[ACTIVE_SCENE]->Update(deltaTime);
+		scenes[ACTIVE_SCENE]->update(deltaTime);
 }
