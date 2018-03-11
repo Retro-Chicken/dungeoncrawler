@@ -11,7 +11,8 @@ int main() {
 		cout << "[!] Error initializing configuration.";
 
 	//	Create window for the game.
-	sf::RenderWindow window(sf::VideoMode(800, 480), "Dungeon Crawler");
+	sf::RenderWindow window(sf::VideoMode(dungeon::MAP_WIDTH * config::TILE_SIZE,
+		dungeon::MAP_HEIGHT * config::TILE_SIZE), "Dungeon Crawler");
 
 	//	Create clock for keeping track of time in between frames.
 	float deltaTime = 0.0f;

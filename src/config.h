@@ -8,6 +8,9 @@ namespace config {
 	extern unsigned VIEW_HEIGHT;
 	extern unsigned VIEW_WIDTH;
 
+	//	Tile size data.
+	extern unsigned TILE_SIZE;
+
 	//	Primary font of the game.
 	extern sf::Font MAIN_FONT;
 

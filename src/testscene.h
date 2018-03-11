@@ -4,6 +4,9 @@
 #include "scenes/Scene.h"
 #include <functional>
 #include "ui/GUIButton.h"
+#include "config.h"
+#include "dungeon/dungeon.h"
+#include <iostream>
 
 class testscene : public Scene {
 public:
@@ -12,6 +15,7 @@ public:
 
 private:
 	GUIButton button;
+	dungeon testDungeon;
 
 	void update(float deltaTime);
 

@@ -1,15 +1,13 @@
 #include "testscene.h"
-#include "config.h"
-#include <iostream>
 
 static sf::Color buttonColor[] = { sf::Color(100, 10, 10), sf::Color(75, 10, 10), sf::Color(50, 10, 10) };
 
 testscene::testscene() {
-	sf::Text buttonText = sf::Text("Test Button", config::MAIN_FONT, 60);
+	sf::Text buttonText = sf::Text("New Dungeon", config::MAIN_FONT, 60);
 	buttonText.setScale(sf::Vector2f(0.5, 0.5));
-	sf::Vector2f position(150, 100);
-	sf::Vector2f size(500, 200);
-	button = GUIButton([]() { cout << "Button Clicked." << endl; }, position, size, buttonColor, buttonText);
+	sf::Vector2f position(600, 200);
+	sf::Vector2f size(200, 100);
+	button = GUIButton([this]() { testDungeon = dungeon(); }, position, size, buttonColor, buttonText);
 }
 
 testscene::~testscene() {
@@ -23,6 +21,8 @@ void testscene::update(float deltaTime) {
 }
 
 void testscene::draw(sf::RenderWindow& window) {
+	window.clear();
+	testDungeon.draw(window);
 	button.draw(window);
 }
 

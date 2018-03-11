@@ -4,6 +4,8 @@ namespace config {
 	unsigned VIEW_HEIGHT = 3 * 32 * 2;
 	unsigned VIEW_WIDTH = 5 * 32 * 2;
 
+	unsigned TILE_SIZE = 16;
+
 	sf::Font MAIN_FONT;
 
 	std::vector<sf::Event> windowEvents;
