@@ -36,6 +36,20 @@ private:
 	void hCorridor(int x1, int x2, int y);
 	void vCorridor(int y1, int y2, int x);
 
+	struct room {
+		sf::IntRect interior;
+		sf::Vector2i center;
+
+		room(int x, int y, int w, int h) : interior(x, y, w, h) {
+			center.x = interior.left + interior.width/2;
+			center.y = interior.top + interior.height/2;
+		}
+
+		bool intersects(room room2) {
+			return room2.interior.intersects(interior);
+		}
+	};
+
 	struct tile {
 		enum TileType { FLOOR_T, WALL_T, EMPTY_T };
 		TileType type = EMPTY_T;
@@ -62,8 +76,8 @@ private:
 	};
 	struct wall : tile {
 		static const sf::IntRect WALL;
-		static const int COLUMNS = 9;
-		static const int COUNT = 9;
+		static const int COLUMNS = 7;
+		static const int COUNT = 7;
 		wall(int x, int y, int index) : tile(x, y,
 			sf::IntRect(WALL.left + WALL.width * (index % COLUMNS),
 			WALL.top + WALL.height * (index/COLUMNS), WALL.width, WALL.height)) {
@@ -89,6 +103,8 @@ private:
 		}
 	};
 	struct decoration {};
+
+	void tileRoom(room area);
 
 	//	TODO: Figure out why I can only use a vector and not an array.
 	std::vector<tile> map;

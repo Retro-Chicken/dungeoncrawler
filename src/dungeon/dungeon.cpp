@@ -37,19 +37,6 @@ void dungeon::generateDungeon() {
 }
 
 static const int MAX_ROOM_ATTEMPTS = 100;
-struct room {
-	sf::IntRect interior;
-	sf::Vector2i center;
-
-	room(int x, int y, int w, int h) : interior(x, y, w, h) {
-		center.x = interior.left + interior.width/2;
-		center.y = interior.top + interior.height/2;
-	}
-
-	bool intersects(room room2) {
-		return room2.interior.intersects(interior);
-	}
-};
 void dungeon::generateRooms() {
 	std::vector<room> rooms;
 	int roomCount = rand() % (MAX_ROOMS - MIN_ROOMS) + MIN_ROOMS;
@@ -69,9 +56,7 @@ void dungeon::generateRooms() {
 			}
 
 		if(!failed) {
-			for(int i = x; i < x + w; i++)
-				for(int j = y; j < y + h; j++)
-					map.at(j * MAP_WIDTH + i) = dungeon::floor(i, j, 0);
+			tileRoom(curRoom);
 
 			if(rooms.size() > 0) {
 				hCorridor(rooms[rooms.size() - 1].center.x, curRoom.center.x, curRoom.center.y);
@@ -84,6 +69,9 @@ void dungeon::generateRooms() {
 			attempts++;
 	}
 }
+//	TODO: Make this take rooms as arguments.
+//	Weird lower down wall glitch because we don't fill the corner of where the
+//	corridors meet.
 void dungeon::hCorridor(int x1, int x2, int y) {
 	for(int x = std::min(x1, x2); x <= std::max(x1, x2); x++)
 		for(int i = 0; i < CORRIDOR_SIZE; i++)
@@ -97,12 +85,50 @@ void dungeon::vCorridor(int y1, int y2, int x) {
 				dungeon::floor(x - CORRIDOR_SIZE/2 + i, y, 0);
 }
 
+static int topLeftCorner[] = { 1, 26, 60 };
+static int topRightCorner[] = { 2, 27, 59 };
+static int bottomLeftCorner[] = { 3, 28, 58 };
+static int bottomRightCorner[] = { 4, 29, 57 };
+static int topEdge[] = { 8, 9, 10 };
+static int leftEdge[] = { 5, 6, 7 };
+static int rightEdge[] = { 14, 15, 16 };
+static int fill[] = { 0, 61, 62, 63, 64 };
+void dungeon::tileRoom(room area) {
+	for(int i = area.interior.left; i < area.interior.left + area.interior.width; i++)
+		for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++) {
+			if(i == area.interior.left) {
+				if(j == area.interior.top)
+					map.at(j * MAP_WIDTH + i) = dungeon::floor(i, j, topLeftCorner[rand() % (sizeof(topLeftCorner)/sizeof(int))]);
+				else
+					map.at(j * MAP_WIDTH + i) = dungeon::floor(i, j, leftEdge[rand() % (sizeof(leftEdge)/sizeof(int))]);
+			} else if(i == area.interior.left + area.interior.width - 1) {
+				if(j == area.interior.top)
+					map.at(j * MAP_WIDTH + i) = dungeon::floor(i, j, topRightCorner[rand() % (sizeof(topRightCorner)/sizeof(int))]);
+				else
+					map.at(j * MAP_WIDTH + i) = dungeon::floor(i, j, rightEdge[rand() % (sizeof(rightEdge)/sizeof(int))]);
+			} else if(j == area.interior.top)
+				map.at(j * MAP_WIDTH + i) = dungeon::floor(i, j, topEdge[rand() % (sizeof(topEdge)/sizeof(int))]);
+			else
+				map.at(j * MAP_WIDTH + i) = dungeon::floor(i, j, fill[rand() % (sizeof(fill)/sizeof(int))]);
+		}
+}
+
+
 void dungeon::generateWalls() {
-	for(int x = 0; x < MAP_WIDTH; x++)
-		for(int y = 0; y < MAP_HEIGHT - 1; y++)
+	/*
+	*	Only want the four middle walls (hence the count % 4), starting at 1.
+	*	Count serves to loop through which wall tile we use.
+	*/
+	int count = 1;
+	for(int y = 0; y < MAP_HEIGHT - 1; y++)
+		for(int x = 0; x < MAP_WIDTH; x++) {
 			if(getTile(x, y).type == tile::EMPTY_T &&
-				getTile(x, y + 1).type == tile::FLOOR_T)
-				map.at(y * MAP_WIDTH + x) = wall(x, y, 0);
+				getTile(x, y + 1).type == tile::FLOOR_T) {
+				map.at(y * MAP_WIDTH + x) = wall(x, y, count);
+				count = 1 + count % 4;
+			} else
+				count = 1;
+		}
 }
 
 void dungeon::generateDecorations() {
