@@ -33,7 +33,6 @@ void dungeon::draw(sf::RenderWindow& window) {
 void dungeon::generateDungeon() {
 	generateRooms();
 	generateWalls();
-	generateDecorations();
 }
 
 static const int MAX_ROOM_ATTEMPTS = 100;
@@ -57,17 +56,15 @@ void dungeon::generateRooms() {
 
 		if(!failed) {
 			tileRoom(curRoom);
-
-			if(rooms.size() > 0) {
-				hCorridor(rooms[rooms.size() - 1].center.x, curRoom.center.x, curRoom.center.y);
-				vCorridor(rooms[rooms.size() - 1].center.y, curRoom.center.y, rooms[rooms.size() - 1].center.x);
-			}
+			decorateRoom(curRoom);
 
 			rooms.push_back(curRoom);
 			attempts = 0;
 		} else
 			attempts++;
 	}
+	for(int i = 0; i < rooms.size() - 1; i++)
+		corridor(rooms[i], rooms[i + 1]);
 }
 
 //	Indices of filler floor tiles. Put here so that corridor method may use it.
@@ -88,6 +85,10 @@ void dungeon::vCorridor(int y1, int y2, int x) {
 			map.at(y * MAP_WIDTH + x - CORRIDOR_SIZE/2 + i) =
 				dungeon::floor(x - CORRIDOR_SIZE/2 + i, y, fill[rand() % (sizeof(fill)/sizeof(int))]);
 }
+void dungeon::corridor(room room1, room room2) {
+	hCorridor(room1.center.x, room2.center.x, room2.center.y);
+	vCorridor(room1.center.y, room2.center.y, room1.center.x);
+}
 
 //	Stores the indices of type of floor tiles we have.
 static int topLeftCorner[] = { 1, 26, 60 };
@@ -98,6 +99,22 @@ static int topEdge[] = { 8, 9, 10 };
 static int leftEdge[] = { 5, 6, 7 };
 static int rightEdge[] = { 14, 15, 16 };
 void dungeon::tileRoom(room area) {
+	//	Decide whether to surround the room with stone tiles.
+	bool surroundStone = rand() % 5 == 0;
+	if(surroundStone) {
+		for(int i = area.interior.left; i < area.interior.left + area.interior.width; i++) {
+			if(i == area.interior.left || i == area.interior.left + area.interior.width - 1)
+				for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++)
+					map.at(j * MAP_WIDTH + i) = dungeon::floor(i, j, 69);
+			else
+				map.at(area.interior.top * MAP_WIDTH + i) = dungeon::floor(i, area.interior.top, 69);
+		}
+		area.interior.left = area.interior.left + 1;
+		area.interior.width = area.interior.width - 2;
+		area.interior.top = area.interior.top + 1;
+		area.interior.height = area.interior.height - 1;
+	}
+
 	//	Loops through each tile in room and chooses random index from the appriate array.
 	for(int i = area.interior.left; i < area.interior.left + area.interior.width; i++)
 		for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++) {
@@ -136,6 +153,6 @@ void dungeon::generateWalls() {
 		}
 }
 
-void dungeon::generateDecorations() {
+void dungeon::decorateRoom(room area) {
 
 }

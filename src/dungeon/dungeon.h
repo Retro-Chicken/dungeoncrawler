@@ -19,7 +19,8 @@ private:
 	static const int MIN_ROOMS = 2;
 	static const int MIN_ROOM_WIDTH = 10, MAX_ROOM_WIDTH = 20;
 	static const int MIN_ROOM_HEIGHT = 7, MAX_ROOM_HEIGHT = 20;
-	static const int CORRIDOR_SIZE = 2;
+	static const int ROOM_BUFFER = 2;
+	static const int CORRIDOR_SIZE = 1;
 
 	//	Texture settings.
 	static sf::Texture tileTexture;
@@ -31,7 +32,6 @@ private:
 	//	Methods used to generate different layers of the dungeon.
 	void generateRooms();
 	void generateWalls();
-	void generateDecorations();
 	//	Methods to connect two rooms of the dungeon.
 	void hCorridor(int x1, int x2, int y);
 	void vCorridor(int y1, int y2, int x);
@@ -44,9 +44,13 @@ private:
 			center.x = interior.left + interior.width/2;
 			center.y = interior.top + interior.height/2;
 		}
+		sf::IntRect bufferBounds() {
+			return sf::IntRect(interior.left - ROOM_BUFFER, interior.top - ROOM_BUFFER,
+				interior.width + 2*ROOM_BUFFER, interior.height + 2*ROOM_BUFFER);
+		}
 
 		bool intersects(room room2) {
-			return room2.interior.intersects(interior);
+			return bufferBounds().intersects(room2.bufferBounds());
 		}
 	};
 
@@ -90,7 +94,7 @@ private:
 	struct floor : tile {
 		static const sf::IntRect FLOOR;
 		static const int COLUMNS = 30;
-		static const int COUNT = 69;
+		static const int COUNT = 72;
 		floor(int x, int y, int index) : tile(x, y,
 			sf::IntRect(FLOOR.left + FLOOR.width * (index % COLUMNS),
 			FLOOR.top + FLOOR.height * (index/COLUMNS), FLOOR.width, FLOOR.height)) {
@@ -104,7 +108,9 @@ private:
 	};
 	struct decoration {};
 
+	void corridor(room room1, room room2);
 	void tileRoom(room area);
+	void decorateRoom(room area);
 
 	//	TODO: Figure out why I can only use a vector and not an array.
 	std::vector<tile> map;
