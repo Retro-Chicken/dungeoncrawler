@@ -69,6 +69,10 @@ void dungeon::generateRooms() {
 			attempts++;
 	}
 }
+
+//	Indices of filler floor tiles. Put here so that corridor method may use it.
+static int fill[] = { 0, 61, 62, 63, 64 };
+
 //	TODO: Make this take rooms as arguments.
 //	Weird lower down wall glitch because we don't fill the corner of where the
 //	corridors meet.
@@ -76,15 +80,16 @@ void dungeon::hCorridor(int x1, int x2, int y) {
 	for(int x = std::min(x1, x2); x <= std::max(x1, x2); x++)
 		for(int i = 0; i < CORRIDOR_SIZE; i++)
 			map.at((y - CORRIDOR_SIZE/2 + i) * MAP_WIDTH + x) =
-				dungeon::floor(x, y - CORRIDOR_SIZE/2 + i, 0);
+				dungeon::floor(x, y - CORRIDOR_SIZE/2 + i, fill[rand() % (sizeof(fill)/sizeof(int))]);
 }
 void dungeon::vCorridor(int y1, int y2, int x) {
 	for(int y = std::min(y1, y2); y <= std::max(y1, y2); y++)
 		for(int i = 0; i < CORRIDOR_SIZE; i++)
 			map.at(y * MAP_WIDTH + x - CORRIDOR_SIZE/2 + i) =
-				dungeon::floor(x - CORRIDOR_SIZE/2 + i, y, 0);
+				dungeon::floor(x - CORRIDOR_SIZE/2 + i, y, fill[rand() % (sizeof(fill)/sizeof(int))]);
 }
 
+//	Stores the indices of type of floor tiles we have.
 static int topLeftCorner[] = { 1, 26, 60 };
 static int topRightCorner[] = { 2, 27, 59 };
 static int bottomLeftCorner[] = { 3, 28, 58 };
@@ -92,8 +97,8 @@ static int bottomRightCorner[] = { 4, 29, 57 };
 static int topEdge[] = { 8, 9, 10 };
 static int leftEdge[] = { 5, 6, 7 };
 static int rightEdge[] = { 14, 15, 16 };
-static int fill[] = { 0, 61, 62, 63, 64 };
 void dungeon::tileRoom(room area) {
+	//	Loops through each tile in room and chooses random index from the appriate array.
 	for(int i = area.interior.left; i < area.interior.left + area.interior.width; i++)
 		for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++) {
 			if(i == area.interior.left) {
