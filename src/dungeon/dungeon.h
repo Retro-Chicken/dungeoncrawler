@@ -32,6 +32,7 @@ private:
 	//	Methods used to generate different layers of the dungeon.
 	void generateRooms();
 	void generateWalls();
+	void generateDecorations();
 	//	Methods to connect two rooms of the dungeon.
 	void hCorridor(int x1, int x2, int y);
 	void vCorridor(int y1, int y2, int x);
@@ -106,7 +107,43 @@ private:
 			walkable = true;
 		}
 	};
-	struct decoration {};
+
+	struct decoration {
+		sf::Sprite sprite;
+		bool empty = true;
+		int x = 0;
+		int y = 0;
+		decoration(int x, int y, sf::IntRect textureRect) {
+			this->x = x;
+			this->y = y;
+			sprite.setTexture(tileTexture);
+			sprite.setTextureRect(textureRect);
+			sprite.setPosition(x * config::TILE_SIZE,
+				y * config::TILE_SIZE + config::TILE_SIZE - sprite.getTextureRect().height);
+		}
+		decoration() {
+			sprite.setTexture(tileTexture);
+		}
+
+		void draw(sf::RenderWindow& window) {
+			if(!empty)
+				window.draw(sprite);
+		}
+	};
+	struct banner : decoration {
+		static const sf::IntRect BANNER;
+		static const int COLUMNS = 6;
+		static const int COUNT = 6;
+		banner(int x, int y, int index) : decoration(x, y,
+			sf::IntRect(BANNER.left + BANNER.width * (index % COLUMNS),
+			BANNER.top + BANNER.height * (index/COLUMNS), BANNER.width, BANNER.height)) {
+			empty = false;
+		}
+
+		banner() : decoration(0 , 0, BANNER) {
+			empty = false;
+		}
+	};
 
 	void corridor(room room1, room room2);
 	void tileRoom(room area);
@@ -114,7 +151,9 @@ private:
 
 	//	TODO: Figure out why I can only use a vector and not an array.
 	std::vector<tile> map;
+	std::vector<decoration> decorationMap;
 	tile getTile(int x, int y);
+	decoration getDecoration(int x, int y);
 };
 
 #endif

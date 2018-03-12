@@ -3,14 +3,18 @@
 
 const sf::IntRect dungeon::wall::WALL = sf::IntRect(0, 16, 16, 32);
 const sf::IntRect dungeon::floor::FLOOR = sf::IntRect(0, 64, 16, 16);
+const sf::IntRect dungeon::banner::BANNER = sf::IntRect(288, 128, 16, 32);
 sf::Texture dungeon::tileTexture;
 
 dungeon::tile dungeon::getTile(int x, int y) { return map[y * dungeon::MAP_WIDTH + x]; }
+dungeon::decoration dungeon::getDecoration(int x, int y) { return decorationMap[y * dungeon::MAP_WIDTH + x]; }
 
 dungeon::dungeon() {
 	for(int i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++) {
 		tile temp;
 		map.push_back(temp);
+		decoration tempDecoration;
+		decorationMap.push_back(tempDecoration);
 	}
 	tileTexture.loadFromFile("resources/tilesets/dungeon_tileset.png");
 	generateDungeon();
@@ -26,13 +30,16 @@ void dungeon::update(float deltaTime) {
 
 void dungeon::draw(sf::RenderWindow& window) {
 	for(int x = 0; x < MAP_WIDTH; x++)
-		for(int y = 0; y < MAP_HEIGHT; y++)
+		for(int y = 0; y < MAP_HEIGHT; y++) {
 			getTile(x, y).draw(window);
+			getDecoration(x, y).draw(window);
+		}
 }
 
 void dungeon::generateDungeon() {
 	generateRooms();
 	generateWalls();
+	generateDecorations();
 }
 
 static const int MAX_ROOM_ATTEMPTS = 100;
@@ -155,4 +162,10 @@ void dungeon::generateWalls() {
 
 void dungeon::decorateRoom(room area) {
 
+}
+
+void dungeon::generateDecorations() {
+	for(int i = 0; i < map.size(); i++)
+		if(map.at(i).type == tile::WALL_T && rand() % 20 == 0)
+			decorationMap.at(i) = banner(i % MAP_WIDTH, i / MAP_WIDTH, rand() % banner::COUNT);
 }
