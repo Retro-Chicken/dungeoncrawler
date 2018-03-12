@@ -15,7 +15,7 @@ public:
 
 private:
 	GUIButton button;
-	dungeon testDungeon;
+	dungeon* testDungeon;
 
 	void update(float deltaTime);
 
