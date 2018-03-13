@@ -75,11 +75,11 @@ static int fill[] = { 0, 61, 62, 63, 64 };
 //	corridors meet.
 void dungeon::hCorridor(int x1, int x2, int y) {
 	for(int x = std::min(x1, x2); x <= std::max(x1, x2); x++)
-		getTile(x, y).addDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+		getTile(x, y).forceDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
 }
 void dungeon::vCorridor(int y1, int y2, int x) {
 	for(int y = std::min(y1, y2); y <= std::max(y1, y2); y++)
-		getTile(x, y).addDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+		getTile(x, y).forceDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
 }
 void dungeon::corridor(room room1, room room2) {
 	hCorridor(room1.center.x, room2.center.x, room2.center.y);

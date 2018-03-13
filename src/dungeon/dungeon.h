@@ -26,7 +26,6 @@ private:
 
 	//	Texture settings.
 	static sf::Texture tileTexture;
-	//sf::Sprite tileSprites[2];
 
 	//	Method to randomly generate dungeon.
 	void generateDungeon();
@@ -94,6 +93,8 @@ private:
 				y * config::TILE_SIZE + config::TILE_SIZE - sprite.getTextureRect().height);
 		}
 
+		void update(float deltaTime) {}
+
 		void draw(sf::RenderWindow& window) const {
 			window.draw(sprite);
 		}
@@ -124,11 +125,20 @@ private:
 			graphics.insert(item);
 		}
 
+		void forceDrawable(drawable item) {
+			if(graphics.find(item) != graphics.end())
+				graphics.erase(item);
+			addDrawable(item);
+		}
+
+		void update(float deltaTime) {
+			for(drawable& graphic : graphics)
+				graphic.update(deltaTime);
+		}
+
 		void draw(sf::RenderWindow& window) const {
-			for(const drawable& graphic : graphics) {
-				//std::cout << "DRAW NIBBA" << std::endl;
+			for(const drawable& graphic : graphics)
 				graphic.draw(window);
-			}
 		}
 
 		std::string getTag() { return graphics.size() > 0 ? graphics.begin()->tag : ""; }
