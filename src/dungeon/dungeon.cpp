@@ -1,5 +1,4 @@
 #include "dungeon.h"
-#include <iostream>
 
 const sf::IntRect dungeon::wall::WALL = sf::IntRect(0, 16, 16, 32);
 const sf::IntRect dungeon::floor::FLOOR = sf::IntRect(0, 64, 16, 16);

@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <set>
 #include "../config.h"
-#include <iostream>
+#include "../rendertools/drawable.h"
 
 class dungeon {
 public:
@@ -26,7 +26,6 @@ private:
 
 	//	Texture settings.
 	static sf::Texture tileTexture;
-	//sf::Sprite tileSprites[2];
 
 	//	Method to randomly generate dungeon.
 	void generateDungeon();
@@ -57,56 +56,6 @@ private:
 		}
 	};
 
-	struct drawable {
-		sf::Sprite sprite;
-		std::string tag;
-		int layer = 0;
-		int x = 0;
-		int y = 0;
-
-		bool operator< (const drawable& obj) const {
-			return this->layer < obj.layer;
-		}
-
-		drawable(int x, int y, sf::IntRect textureRect) {
-			this->x = x;
-			this->y = y;
-			sprite.setPosition(x * config::TILE_SIZE,
-				y * config::TILE_SIZE + config::TILE_SIZE - sprite.getTextureRect().height);
-			sprite.setTexture(tileTexture);
-			sprite.setTextureRect(textureRect);
-		}
-		drawable(int x, int y, sf::IntRect textureRect, int layer) : drawable(x, y, textureRect) {
-			this->layer = layer;
-		}
-		drawable(sf::IntRect textureRect) {
-			sprite.setTexture(tileTexture);
-			sprite.setTextureRect(textureRect);
-		}
-		drawable(sf::IntRect textureRect, int layer) : drawable(textureRect) {
-			this->layer = layer;
-		}
-
-		void setPosition(int x, int y) {
-			this->x = x;
-			this->y = y;
-			sprite.setPosition(x * config::TILE_SIZE,
-				y * config::TILE_SIZE + config::TILE_SIZE - sprite.getTextureRect().height);
-		}
-
-		void draw(sf::RenderWindow& window) const {
-			window.draw(sprite);
-		}
-
-		void draw(int x, int y, sf::RenderWindow& window) {
-			sprite.setPosition(x * config::TILE_SIZE,
-				y * config::TILE_SIZE + config::TILE_SIZE - sprite.getTextureRect().height);
-			window.draw(sprite);
-			sprite.setPosition(this->x * config::TILE_SIZE,
-				this->y * config::TILE_SIZE + config::TILE_SIZE - sprite.getTextureRect().height);
-		}
-	};
-
 	struct tile {
 		bool isEmpty() { return graphics.size() == 0; }
 		bool walkable = false;
@@ -134,29 +83,32 @@ private:
 		std::string getTag() { return graphics.size() > 0 ? graphics.begin()->tag : ""; }
 	};
 
-	struct wall : drawable {
+	class wall : public drawable {
+	public:
 		static const sf::IntRect WALL;
 		static const int COLUMNS = 7;
 		static const int COUNT = 7;
-		wall(int index) : drawable(sf::IntRect(WALL.left + WALL.width * (index % COLUMNS),
+		wall(int index) : drawable(&tileTexture, sf::IntRect(WALL.left + WALL.width * (index % COLUMNS),
 			WALL.top + WALL.height * (index/COLUMNS), WALL.width, WALL.height), 0) {
 			tag = "wall";
 		}
 	};
-	struct floor : drawable {
+	class floor : public drawable {
+	public:
 		static const sf::IntRect FLOOR;
 		static const int COLUMNS = 30;
 		static const int COUNT = 72;
-		floor(int index) : drawable(sf::IntRect(FLOOR.left + FLOOR.width * (index % COLUMNS),
+		floor(int index) : drawable(&tileTexture, sf::IntRect(FLOOR.left + FLOOR.width * (index % COLUMNS),
 			FLOOR.top + FLOOR.height * (index/COLUMNS), FLOOR.width, FLOOR.height), 0) {
 			tag = "floor";
 		}
 	};
-	struct banner : drawable {
+	class banner : public drawable {
+	public:
 		static const sf::IntRect BANNER;
 		static const int COLUMNS = 6;
 		static const int COUNT = 6;
-		banner(int index) : drawable(sf::IntRect(BANNER.left + BANNER.width * (index % COLUMNS),
+		banner(int index) : drawable(&tileTexture, sf::IntRect(BANNER.left + BANNER.width * (index % COLUMNS),
 			BANNER.top + BANNER.height * (index/COLUMNS), BANNER.width, BANNER.height), 1) {
 			tag = "banner";
 		}
