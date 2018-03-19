@@ -5,6 +5,7 @@
 #include <set>
 #include "../config.h"
 #include "../rendertools/drawable.h"
+#include "../rendertools/animation.h"
 
 class dungeon {
 public:
@@ -14,9 +15,10 @@ public:
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
 
+	static const int MAP_HEIGHT = 50, MAP_WIDTH = 75;
+
 private:
 	//	Dungeon settings.
-	static const int MAP_HEIGHT = 50, MAP_WIDTH = 75;
 	static const int MAX_ROOMS = 4;
 	static const int MIN_ROOMS = 2;
 	static const int MIN_ROOM_WIDTH = 10, MAX_ROOM_WIDTH = 20;
@@ -73,11 +75,20 @@ private:
 			graphics.insert(item);
 		}
 
+		void forceDrawable(drawable item) {
+			if(graphics.find(item) != graphics.end())
+				graphics.erase(item);
+			addDrawable(item);
+		}
+
 		void draw(sf::RenderWindow& window) const {
-			for(const drawable& graphic : graphics) {
-				//std::cout << "DRAW NIBBA" << std::endl;
+			for(const drawable& graphic : graphics)
 				graphic.draw(window);
-			}
+		}
+
+		void update(float deltaTime) {
+			for(drawable graphic : graphics)
+				graphic.update(deltaTime);
 		}
 
 		std::string getTag() { return graphics.size() > 0 ? graphics.begin()->tag : ""; }
@@ -86,8 +97,7 @@ private:
 	class wall : public drawable {
 	public:
 		static const sf::IntRect WALL;
-		static const int COLUMNS = 7;
-		static const int COUNT = 7;
+		static const int COLUMNS = 7, COUNT = 7;
 		wall(int index) : drawable(&tileTexture, sf::IntRect(WALL.left + WALL.width * (index % COLUMNS),
 			WALL.top + WALL.height * (index/COLUMNS), WALL.width, WALL.height), 0) {
 			tag = "wall";
@@ -96,8 +106,7 @@ private:
 	class floor : public drawable {
 	public:
 		static const sf::IntRect FLOOR;
-		static const int COLUMNS = 30;
-		static const int COUNT = 72;
+		static const int COLUMNS = 30, COUNT = 72;
 		floor(int index) : drawable(&tileTexture, sf::IntRect(FLOOR.left + FLOOR.width * (index % COLUMNS),
 			FLOOR.top + FLOOR.height * (index/COLUMNS), FLOOR.width, FLOOR.height), 0) {
 			tag = "floor";
@@ -106,11 +115,18 @@ private:
 	class banner : public drawable {
 	public:
 		static const sf::IntRect BANNER;
-		static const int COLUMNS = 6;
-		static const int COUNT = 6;
+		static const int COLUMNS = 6, COUNT = 6;
 		banner(int index) : drawable(&tileTexture, sf::IntRect(BANNER.left + BANNER.width * (index % COLUMNS),
 			BANNER.top + BANNER.height * (index/COLUMNS), BANNER.width, BANNER.height), 1) {
 			tag = "banner";
+		}
+	};
+	class torch : public animation {
+	public:
+		static const sf::IntRect TORCH;
+		static const int COLUMNS = 4, COUNT = 4;
+		torch() : animation(&tileTexture, TORCH, COLUMNS, COUNT, 1.0, 1) {
+			tag = "torch";
 		}
 	};
 

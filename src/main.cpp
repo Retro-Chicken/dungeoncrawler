@@ -31,7 +31,6 @@ int main() {
 
 	while (window.isOpen()) {
 		deltaTime = clock.restart().asSeconds();
-
 		/*
 		*	Clear previous data in windowEvents.
 		*	Load events into config for reference by whichever class needs them.

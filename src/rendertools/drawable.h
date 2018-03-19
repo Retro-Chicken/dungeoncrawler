@@ -25,9 +25,10 @@ public:
 	void setPosition(int x, int y);
 
 	void draw(sf::RenderWindow& window) const;
-
 	void draw(int x, int y, sf::RenderWindow& window);
-private:
+
+	virtual void update(float deltaTime) {}
+protected:
 	anchor::ANCHOR origin = anchor::ANCHOR_BOTTOM_LEFT;
 	sf::Texture* texture;
 	sf::Sprite sprite;

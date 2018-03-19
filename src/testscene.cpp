@@ -21,6 +21,7 @@ void testscene::update(float deltaTime) {
 	for(int i = 0; i < config::windowEvents.size(); i++)
 		button.registerEvent(config::windowEvents[i]);
 	button.update(deltaTime);
+	testDungeon->update(deltaTime);
 }
 
 void testscene::draw(sf::RenderWindow& window) {

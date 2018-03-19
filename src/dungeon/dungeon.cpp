@@ -3,6 +3,7 @@
 const sf::IntRect dungeon::wall::WALL = sf::IntRect(0, 16, 16, 32);
 const sf::IntRect dungeon::floor::FLOOR = sf::IntRect(0, 64, 16, 16);
 const sf::IntRect dungeon::banner::BANNER = sf::IntRect(288, 128, 16, 32);
+const sf::IntRect dungeon::torch::TORCH = sf::IntRect(160, 254, 16, 32);
 sf::Texture dungeon::tileTexture;
 
 dungeon::tile& dungeon::getTile(int x, int y) { return map[y * dungeon::MAP_WIDTH + x]; }
@@ -19,7 +20,9 @@ dungeon::~dungeon() {
 }
 
 void dungeon::update(float deltaTime) {
-
+	for(int x = 0; x < MAP_WIDTH; x++)
+		for(int y = 0; y < MAP_HEIGHT; y++)
+			getTile(x, y).update(deltaTime);
 }
 
 void dungeon::draw(sf::RenderWindow& window) {
@@ -74,11 +77,11 @@ static int fill[] = { 0, 61, 62, 63, 64 };
 //	corridors meet.
 void dungeon::hCorridor(int x1, int x2, int y) {
 	for(int x = std::min(x1, x2); x <= std::max(x1, x2); x++)
-		getTile(x, y).addDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+		getTile(x, y).forceDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
 }
 void dungeon::vCorridor(int y1, int y2, int x) {
 	for(int y = std::min(y1, y2); y <= std::max(y1, y2); y++)
-		getTile(x, y).addDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+		getTile(x, y).forceDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
 }
 void dungeon::corridor(room room1, room room2) {
 	hCorridor(room1.center.x, room2.center.x, room2.center.y);
@@ -153,7 +156,10 @@ void dungeon::decorateRoom(room area) {
 
 void dungeon::generateDecorations() {
 	for(int x = 0; x < MAP_WIDTH; x++)
-		for(int y = 0; y < MAP_HEIGHT; y++)
+		for(int y = 0; y < MAP_HEIGHT; y++) {
 			if(getTile(x, y).getTag() == "wall" && rand() % 20 == 0)
 				getTile(x, y).addDrawable(banner(rand() % banner::COUNT));
+			if(getTile(x, y).getTag() == "wall" && rand() % 20 == 0)
+				getTile(x, y).addDrawable(torch());
+		}
 }
