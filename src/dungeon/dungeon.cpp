@@ -3,7 +3,7 @@
 const sf::IntRect dungeon::wall::WALL = sf::IntRect(0, 16, 16, 32);
 const sf::IntRect dungeon::floor::FLOOR = sf::IntRect(0, 64, 16, 16);
 const sf::IntRect dungeon::banner::BANNER = sf::IntRect(288, 128, 16, 32);
-const sf::IntRect dungeon::torch::TORCH = sf::IntRect(160, 254, 16, 32);
+const sf::IntRect dungeon::torch::TORCH = sf::IntRect(176, 254, 16, 32);
 sf::Texture dungeon::tileTexture;
 
 dungeon::tile& dungeon::getTile(int x, int y) { return map[y * dungeon::MAP_WIDTH + x]; }
@@ -16,7 +16,7 @@ dungeon::dungeon() {
 }
 
 dungeon::~dungeon() {
-	for(int i = 0; i < map.size(); i++) map[i].clear(); 
+	for(int i = 0; i < map.size(); i++) map[i].clear();
 }
 
 void dungeon::update(float deltaTime) {

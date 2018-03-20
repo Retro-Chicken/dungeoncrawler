@@ -132,8 +132,8 @@ private:
 	class torch : public animation {
 	public:
 		static const sf::IntRect TORCH;
-		static const int COLUMNS = 4, COUNT = 4;
-		torch() : animation(&tileTexture, TORCH, COLUMNS, COUNT, 1.0, 1) {
+		static const int COLUMNS = 3, COUNT = 3;
+		torch() : animation(&tileTexture, TORCH, COLUMNS, COUNT, 0.5, 1) {
 			tag = "torch";
 		}
 	};
