@@ -16,7 +16,7 @@ dungeon::dungeon() {
 }
 
 dungeon::~dungeon() {
-
+	for(int i = 0; i < map.size(); i++) map[i].clear(); 
 }
 
 void dungeon::update(float deltaTime) {
@@ -77,11 +77,11 @@ static int fill[] = { 0, 61, 62, 63, 64 };
 //	corridors meet.
 void dungeon::hCorridor(int x1, int x2, int y) {
 	for(int x = std::min(x1, x2); x <= std::max(x1, x2); x++)
-		getTile(x, y).forceDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+		getTile(x, y).forceDrawable(new dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
 }
 void dungeon::vCorridor(int y1, int y2, int x) {
 	for(int y = std::min(y1, y2); y <= std::max(y1, y2); y++)
-		getTile(x, y).forceDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+		getTile(x, y).forceDrawable(new dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
 }
 void dungeon::corridor(room room1, room room2) {
 	hCorridor(room1.center.x, room2.center.x, room2.center.y);
@@ -103,9 +103,9 @@ void dungeon::tileRoom(room area) {
 		for(int i = area.interior.left; i < area.interior.left + area.interior.width; i++) {
 			if(i == area.interior.left || i == area.interior.left + area.interior.width - 1)
 				for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++)
-					getTile(i, j).addDrawable(dungeon::floor(69));
+					getTile(i, j).addDrawable(new dungeon::floor(69));
 			else
-				getTile(i, area.interior.top).addDrawable(dungeon::floor(69));
+				getTile(i, area.interior.top).addDrawable(new dungeon::floor(69));
 		}
 		area.interior.left = area.interior.left + 1;
 		area.interior.width = area.interior.width - 2;
@@ -118,18 +118,18 @@ void dungeon::tileRoom(room area) {
 		for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++) {
 			if(i == area.interior.left) {
 				if(j == area.interior.top)
-					getTile(i, j).addDrawable(dungeon::floor(topLeftCorner[rand() % (sizeof(topLeftCorner)/sizeof(int))]));
+					getTile(i, j).addDrawable(new dungeon::floor(topLeftCorner[rand() % (sizeof(topLeftCorner)/sizeof(int))]));
 				else
-					getTile(i, j).addDrawable(dungeon::floor(leftEdge[rand() % (sizeof(leftEdge)/sizeof(int))]));
+					getTile(i, j).addDrawable(new dungeon::floor(leftEdge[rand() % (sizeof(leftEdge)/sizeof(int))]));
 			} else if(i == area.interior.left + area.interior.width - 1) {
 				if(j == area.interior.top)
-					getTile(i, j).addDrawable(dungeon::floor(topRightCorner[rand() % (sizeof(topRightCorner)/sizeof(int))]));
+					getTile(i, j).addDrawable(new dungeon::floor(topRightCorner[rand() % (sizeof(topRightCorner)/sizeof(int))]));
 				else
-					getTile(i, j).addDrawable(dungeon::floor(rightEdge[rand() % (sizeof(rightEdge)/sizeof(int))]));
+					getTile(i, j).addDrawable(new dungeon::floor(rightEdge[rand() % (sizeof(rightEdge)/sizeof(int))]));
 			} else if(j == area.interior.top)
-				getTile(i, j).addDrawable(dungeon::floor(topEdge[rand() % (sizeof(topEdge)/sizeof(int))]));
+				getTile(i, j).addDrawable(new dungeon::floor(topEdge[rand() % (sizeof(topEdge)/sizeof(int))]));
 			else
-				getTile(i, j).addDrawable(dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+				getTile(i, j).addDrawable(new dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
 		}
 }
 
@@ -143,7 +143,7 @@ void dungeon::generateWalls() {
 	for(int y = 0; y < MAP_HEIGHT - 1; y++)
 		for(int x = 0; x < MAP_WIDTH; x++) {
 			if(getTile(x, y).isEmpty() && !getTile(x, y + 1).isEmpty()) {
-				getTile(x, y).addDrawable(wall(count));
+				getTile(x, y).addDrawable(new wall(count));
 				count = 1 + count % 4;
 			} else
 				count = 1;
@@ -158,8 +158,8 @@ void dungeon::generateDecorations() {
 	for(int x = 0; x < MAP_WIDTH; x++)
 		for(int y = 0; y < MAP_HEIGHT; y++) {
 			if(getTile(x, y).getTag() == "wall" && rand() % 20 == 0)
-				getTile(x, y).addDrawable(banner(rand() % banner::COUNT));
+				getTile(x, y).addDrawable(new banner(rand() % banner::COUNT));
 			if(getTile(x, y).getTag() == "wall" && rand() % 20 == 0)
-				getTile(x, y).addDrawable(torch());
+				getTile(x, y).addDrawable(new torch());
 		}
 }

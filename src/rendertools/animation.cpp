@@ -22,9 +22,7 @@ animation::~animation() {}
 
 void animation::update(float deltaTime) {
 	totalTime += deltaTime;
-	std::cout << totalTime << " " << frameTime << std::endl; 
 	while(totalTime >= frameTime) {
-		std::cout << "SWITCHED BOI" << std::endl;
 		totalTime -= frameTime;
 		frame++;
 		frame %= count;

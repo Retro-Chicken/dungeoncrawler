@@ -58,40 +58,48 @@ private:
 		}
 	};
 
+	struct drawablecompare
+	{
+		bool operator()(const drawable* lhs, const drawable* rhs) const  { return *lhs < *rhs; }
+	};
+
 	struct tile {
 		bool isEmpty() { return graphics.size() == 0; }
 		bool walkable = false;
 		void setWalkable(bool walkable) { this->walkable = walkable; }
 		int x = 0;
 		int y = 0;
-		std::set<drawable> graphics;
+		std::set<drawable*, drawablecompare> graphics;
 		tile(int x, int y) {
 			this->x = x;
 			this->y = y;
 		}
+		void clear() {
+			for(drawable* graphic : graphics) delete graphic;
+		}
 
-		void addDrawable(drawable item) {
-			item.setPosition(x, y);
+		void addDrawable(drawable* item) {
+			item->setPosition(x, y);
 			graphics.insert(item);
 		}
 
-		void forceDrawable(drawable item) {
+		void forceDrawable(drawable* item) {
 			if(graphics.find(item) != graphics.end())
 				graphics.erase(item);
 			addDrawable(item);
 		}
 
 		void draw(sf::RenderWindow& window) const {
-			for(const drawable& graphic : graphics)
-				graphic.draw(window);
+			for(drawable* graphic : graphics)
+				graphic->draw(window);
 		}
 
 		void update(float deltaTime) {
-			for(drawable graphic : graphics)
-				graphic.update(deltaTime);
+			for(drawable* graphic : graphics)
+				graphic->update(deltaTime);
 		}
 
-		std::string getTag() { return graphics.size() > 0 ? graphics.begin()->tag : ""; }
+		std::string getTag() { return graphics.size() > 0 ? (*graphics.begin())->tag : ""; }
 	};
 
 	class wall : public drawable {
