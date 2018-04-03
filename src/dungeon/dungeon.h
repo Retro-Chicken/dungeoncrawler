@@ -144,7 +144,11 @@ private:
 
 	//	TODO: Figure out why I can only use a vector and not an array.
 	std::vector<tile> map;
+public:
 	tile& getTile(int x, int y);
+	static sf::Vector2i globalToLocal(sf::Vector2i mouseCoords) {
+			return sf::Vector2i(mouseCoords.x / config::TILE_SIZE, mouseCoords.y / config::TILE_SIZE);
+	}
 };
 
 #endif

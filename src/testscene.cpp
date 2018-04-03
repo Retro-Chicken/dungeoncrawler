@@ -22,6 +22,10 @@ void testscene::update(float deltaTime) {
 		button.registerEvent(config::windowEvents[i]);
 	button.update(deltaTime);
 	testDungeon->update(deltaTime);
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		sf::Vector2i point = dungeon::globalToLocal(sf::Mouse::getPosition(*config::WINDOW));
+		std::cout << "You clicked: " << point.x << " " << point.y << std::endl;
+	}
 }
 
 void testscene::draw(sf::RenderWindow& window) {
