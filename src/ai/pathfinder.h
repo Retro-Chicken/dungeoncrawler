@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include "path.h"
+#include <climits>
+#include <set>
 #include <functional>
 
 namespace pathfinder {

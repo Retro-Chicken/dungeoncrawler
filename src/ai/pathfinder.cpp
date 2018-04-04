@@ -1,58 +1,80 @@
 #include "pathfinder.h"
-#include <climits>
+
+int heuristicEstimate(sf::Vector2i current, sf::Vector2i end);
+struct SearchPoint {
+	sf::Vector2i point;
+	int gValue = INT_MAX/2;
+	int hValue = INT_MAX/2;
+
+	SearchPoint(sf::Vector2i point, sf::Vector2i end) {
+		this->point = point;
+		hValue = heuristicEstimate(point, end);
+	}
+	bool operator== (const SearchPoint& right) const {
+		return point == right.point;
+	}
+
+	int getFValue() const { return gValue + hValue; }
+
+	bool operator<(const SearchPoint& right) const {
+		return getFValue() < right.getFValue();
+	}
+};
+
+path reconstructPath(std::map<SearchPoint, SearchPoint> cameFrom, SearchPoint current);
 
 path pathfinder::aStar(sf::Vector2i start, sf::Vector2i end, std::function<bool(sf::Vector2i)> isBlocked) {
-	std::vector<sf::Vector2i> closedSet;
-	std::vector<sf::Vector2i> openSet;
-	openSet.insert(start);
+	std::set<SearchPoint> closedSet;
+	std::set<SearchPoint> openSet;
+	SearchPoint startSP(start, end);
+	SearchPoint endSP(end, end);
+	startSP.gValue = 0;
+	openSet.insert(startSP);
 
-	std::map<sf::Vector2i, sf::Vector2i> cameFrom;
+	std::map<SearchPoint, SearchPoint> cameFrom;
 
-	std::map<sf::Vector2i, int> gScore;
-	gScore.insert({start, 0});
-	std::map<sf::Vector2i, int> fScore;
-	fScore.insert({start, heuristicEstimate(start, end)});
+	std::set<SearchPoint> gScores;
+	gScores.insert(startSP);
 
 	while(!openSet.empty()) {
-		sf::Vector2i current = openSet.at(0);
-		for(sf::Vector2i val : openSet)
-			if(fScore[val] < fScore[current])
-				current = val;
-		if(current == end)
+		SearchPoint current = *(openSet.begin());
+		if(current == endSP)
 			return reconstructPath(cameFrom, current);
 
-		openSet.remove(current);
+		openSet.erase(openSet.begin());
 		closedSet.insert(current);
 
 		for(int i = 0; i < 4; i++) {
-			sf::Vector2i neighbor(current);
+			SearchPoint neighbor(current.point, end);
 			switch(i) {
-				case 0: neighbor.x -= 1; break;
-				case 1: neighbor.x += 1; break;
-				case 2: neighbor.y -= 1; break;
-				case 3: neighbor.y += 1; break;
+				case 0: neighbor.point.x -= 1; break;
+				case 1: neighbor.point.x += 1; break;
+				case 2: neighbor.point.y -= 1; break;
+				case 3: neighbor.point.y += 1; break;
 			}
-			if(closedSet.find(current) != closedSet.end())
+			if(isBlocked(neighbor.point))
 				continue;
-			if(openSet.find(current) == openSet.end())
+			if(closedSet.find(neighbor) != closedSet.end())
+				continue;
+			if(openSet.find(neighbor) == openSet.end())
 				openSet.insert(neighbor);
-			tentativeGScore = gScore[current] + 1;
-			if(tentativeGScore >= (gScore.find(neighbor) != gScore.end() ? gScore[neighbor] : INT_MAX))
+			int tentativeGScore = current.gValue + 1;
+			if(tentativeGScore >= (gScores.find(neighbor) != gScores.end() ? gScores.find(neighbor)->gValue : INT_MAX))
 				continue;
 			cameFrom.insert({neighbor, current});
-			gScore.insert({neighbor, tentativeGScore});
-			fScore.insert({neighbor, tentativeGScore + heuristicEstimate(neighbor, end)});
+			neighbor.gValue = tentativeGScore;
+			gScores.insert(neighbor);
 		}
 	}
-	return NULL;
+	return path();
 }
 
-path reconstructPath(std::map<sf::Vector2i, sf::Vector2i> cameFrom, sf::Vector2i current) {
+path reconstructPath(std::map<SearchPoint, SearchPoint> cameFrom, SearchPoint current) {
 	path result;
-	result.push(current);
+	result.push(current.point);
 	while(cameFrom.find(current) != cameFrom.end()) {
 		current = cameFrom[current];
-		result.push(current);
+		result.push(current.point);
 	}
 	return result;
 }
