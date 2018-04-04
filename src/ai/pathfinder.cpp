@@ -6,6 +6,8 @@ struct SearchPoint {
 	int gValue = INT_MAX/2;
 	int hValue = INT_MAX/2;
 
+	SearchPoint() {}
+
 	SearchPoint(sf::Vector2i point, sf::Vector2i end) {
 		this->point = point;
 		hValue = heuristicEstimate(point, end);
