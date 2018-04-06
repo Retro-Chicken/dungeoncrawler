@@ -146,8 +146,13 @@ private:
 	std::vector<tile> map;
 public:
 	tile& getTile(int x, int y);
+	bool isWalkable(sf::Vector2i point) {
+		if(point.x >= 0 && point.x < MAP_WIDTH && point.y >= 0 && point.y < MAP_HEIGHT)
+			return getTile(point.x, point.y).walkable;
+		return false;
+	}
 	static sf::Vector2i globalToLocal(sf::Vector2i mouseCoords) {
-			return sf::Vector2i(mouseCoords.x / config::TILE_SIZE, mouseCoords.y / config::TILE_SIZE);
+		return sf::Vector2i(mouseCoords.x / config::TILE_SIZE, mouseCoords.y / config::TILE_SIZE);
 	}
 };
 

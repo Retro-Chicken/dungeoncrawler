@@ -4,7 +4,6 @@ static sf::Color buttonColor[] = { sf::Color(100, 10, 10), sf::Color(75, 10, 10)
 
 testscene::testscene() {
 	testDungeon = new dungeon();
-
 	sf::Text buttonText = sf::Text("New Dungeon", config::MAIN_FONT, 60);
 	buttonText.setScale(sf::Vector2f(0.5, 0.5));
 	sf::Vector2f position(500, 650);
@@ -22,10 +21,21 @@ void testscene::update(float deltaTime) {
 		button.registerEvent(config::windowEvents[i]);
 	button.update(deltaTime);
 	testDungeon->update(deltaTime);
-	if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-		sf::Vector2i point = dungeon::globalToLocal(sf::Mouse::getPosition(*config::WINDOW));
-		std::cout << "You clicked: " << point.x << " " << point.y << std::endl;
-	}
+
+	for(sf::Event evnt : config::windowEvents)
+		if(evnt.type == sf::Event::MouseButtonPressed) {
+			if(evnt.mouseButton.button == sf::Mouse::Left) {
+				if(!captured) {
+					point1 = dungeon::globalToLocal(sf::Mouse::getPosition(*config::WINDOW));
+					captured = true;
+				} else {
+					std::cout << "Called" << std::endl;
+					point2 = dungeon::globalToLocal(sf::Mouse::getPosition(*config::WINDOW));
+					std::cout << astar::aStar(point1, point2,
+					[this](int x, int y)->bool{ return !testDungeon->isWalkable(sf::Vector2i(x, y)); }).toString() << std::endl;
+				}
+			}
+		}
 }
 
 void testscene::draw(sf::RenderWindow& window) {

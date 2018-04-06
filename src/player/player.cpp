@@ -10,9 +10,9 @@ player::~player() {
 }
 
 void player::update(float deltaTime) {
-	animations[animState].update(deltaTime);
+	//animations[animState].update(deltaTime);
 }
 
 void draw(sf::RenderWindow& window) {
-	animations[animState].draw(window);
+	//animations[animState].draw(window);
 }

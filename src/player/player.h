@@ -26,8 +26,8 @@ private:
 	sf::Vector2i position;
 	AnimationStates animState = IDLE;
 	PlayerType pClass = CLERIC;
-	Gender gender = ABSORBO;
-	animation animations[5];
+	Gender gender = MALE;
+	//animation animations[5];
 };
 
 #endif
