@@ -10,6 +10,12 @@ animation::animation(sf::Texture* texture, sf::IntRect startingFrame, int column
 animation::animation(int x, int y, sf::Texture* texture, sf::IntRect startingFrame, int columns, int count, float animTime)
 	: animation(x, y, texture, startingFrame, columns, count, animTime, 0) {}
 
+
+animation::animation(sf::Texture* texture, sf::IntRect startingFrame, int columns, int count, float animTime, anchor::ANCHOR anchorType)
+	: animation(0, 0, texture, startingFrame, columns, count, animTime, 0) {
+	setAnchor(anchorType);
+}
+
 animation::animation(int x, int y, sf::Texture* texture, sf::IntRect startingFrame, int columns, int count, float animTime, int layer)
 	: drawable(x, y, texture, startingFrame, layer) {
 	this->columns = columns;

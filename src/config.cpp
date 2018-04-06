@@ -9,7 +9,13 @@ namespace config {
 	sf::Font MAIN_FONT;
 
 	std::vector<sf::Event> windowEvents;
+
+	sf::RenderWindow* WINDOW = nullptr;
 };
+
+void config::setWindow(sf::RenderWindow* window) {
+	WINDOW = window;
+}
 
 bool config::initialize() {
 	MAIN_FONT.loadFromFile("resources/fonts/arial.ttf");

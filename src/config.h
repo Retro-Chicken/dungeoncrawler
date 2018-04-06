@@ -17,6 +17,10 @@ namespace config {
 	//	Events produced by the game window so that all classes may access them.
 	extern std::vector<sf::Event> windowEvents;
 
+	//	Current window of game
+	extern sf::RenderWindow* WINDOW;
+	void setWindow(sf::RenderWindow* window);
+
 	//	Function to configure basic settings.
 	bool initialize();
 

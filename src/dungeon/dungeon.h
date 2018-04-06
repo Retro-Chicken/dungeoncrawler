@@ -79,7 +79,7 @@ private:
 		}
 
 		void addDrawable(drawable* item) {
-			item->setPosition(x, y);
+			item->setPosition(x * config::TILE_SIZE, (y + 1) * config::TILE_SIZE);
 			graphics.insert(item);
 		}
 
@@ -144,7 +144,16 @@ private:
 
 	//	TODO: Figure out why I can only use a vector and not an array.
 	std::vector<tile> map;
+public:
 	tile& getTile(int x, int y);
+	bool isWalkable(sf::Vector2i point) {
+		if(point.x >= 0 && point.x < MAP_WIDTH && point.y >= 0 && point.y < MAP_HEIGHT)
+			return getTile(point.x, point.y).walkable;
+		return false;
+	}
+	static sf::Vector2i globalToLocal(sf::Vector2i mouseCoords) {
+		return sf::Vector2i(mouseCoords.x / config::TILE_SIZE, mouseCoords.y / config::TILE_SIZE);
+	}
 };
 
 #endif

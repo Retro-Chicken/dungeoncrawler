@@ -76,12 +76,16 @@ static int fill[] = { 0, 61, 62, 63, 64 };
 //	Weird lower down wall glitch because we don't fill the corner of where the
 //	corridors meet.
 void dungeon::hCorridor(int x1, int x2, int y) {
-	for(int x = std::min(x1, x2); x <= std::max(x1, x2); x++)
+	for(int x = std::min(x1, x2); x <= std::max(x1, x2); x++) {
 		getTile(x, y).forceDrawable(new dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+		getTile(x, y).setWalkable(true);
+	}
 }
 void dungeon::vCorridor(int y1, int y2, int x) {
-	for(int y = std::min(y1, y2); y <= std::max(y1, y2); y++)
+	for(int y = std::min(y1, y2); y <= std::max(y1, y2); y++) {
 		getTile(x, y).forceDrawable(new dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+		getTile(x, y).setWalkable(true);
+	}
 }
 void dungeon::corridor(room room1, room room2) {
 	hCorridor(room1.center.x, room2.center.x, room2.center.y);
@@ -102,10 +106,14 @@ void dungeon::tileRoom(room area) {
 	if(surroundStone) {
 		for(int i = area.interior.left; i < area.interior.left + area.interior.width; i++) {
 			if(i == area.interior.left || i == area.interior.left + area.interior.width - 1)
-				for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++)
+				for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++) {
 					getTile(i, j).addDrawable(new dungeon::floor(69));
-			else
+					getTile(i, j).setWalkable(true);
+				}
+			else {
 				getTile(i, area.interior.top).addDrawable(new dungeon::floor(69));
+				getTile(i, area.interior.top).setWalkable(true);
+			}
 		}
 		area.interior.left = area.interior.left + 1;
 		area.interior.width = area.interior.width - 2;
@@ -117,19 +125,28 @@ void dungeon::tileRoom(room area) {
 	for(int i = area.interior.left; i < area.interior.left + area.interior.width; i++)
 		for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++) {
 			if(i == area.interior.left) {
-				if(j == area.interior.top)
+				if(j == area.interior.top) {
 					getTile(i, j).addDrawable(new dungeon::floor(topLeftCorner[rand() % (sizeof(topLeftCorner)/sizeof(int))]));
-				else
+					getTile(i, j).setWalkable(true);
+				} else {
 					getTile(i, j).addDrawable(new dungeon::floor(leftEdge[rand() % (sizeof(leftEdge)/sizeof(int))]));
+					getTile(i, j).setWalkable(true);
+				}
 			} else if(i == area.interior.left + area.interior.width - 1) {
-				if(j == area.interior.top)
+				if(j == area.interior.top) {
 					getTile(i, j).addDrawable(new dungeon::floor(topRightCorner[rand() % (sizeof(topRightCorner)/sizeof(int))]));
-				else
+					getTile(i, j).setWalkable(true);
+				} else {
 					getTile(i, j).addDrawable(new dungeon::floor(rightEdge[rand() % (sizeof(rightEdge)/sizeof(int))]));
-			} else if(j == area.interior.top)
+					getTile(i, j).setWalkable(true);
+				}
+			} else if(j == area.interior.top) {
 				getTile(i, j).addDrawable(new dungeon::floor(topEdge[rand() % (sizeof(topEdge)/sizeof(int))]));
-			else
+				getTile(i, j).setWalkable(true);
+			} else {
 				getTile(i, j).addDrawable(new dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+				getTile(i, j).setWalkable(true);
+			}
 		}
 }
 

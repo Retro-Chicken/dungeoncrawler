@@ -13,6 +13,7 @@ int main() {
 	//	Create window for the game.
 	sf::RenderWindow window(sf::VideoMode(dungeon::MAP_WIDTH * config::TILE_SIZE,
 		dungeon::MAP_HEIGHT * config::TILE_SIZE), "Dungeon Crawler");
+	config::setWindow(&window);
 
 	//	Create clock for keeping track of time in between frames.
 	float deltaTime = 0.0f;
