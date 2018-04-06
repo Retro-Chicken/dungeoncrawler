@@ -1,7 +1,7 @@
 #include "player.h"
 
 float player::speed = 64;
-sf::Texture player::charTexture;
+sf::Texture player::charTexture[5];
 int player::ANIM_COUNT = 5;
 int player::ANIM_FRAMES = 10;
 float player::ANIM_SPEED = 0.1;
@@ -10,9 +10,13 @@ player::player(PlayerType pClass, Gender gender) {
 	this->pClass = pClass;
 	this->gender = gender;
 
-	charTexture.loadFromFile("resources/tilesets/cleric.png");
+	charTexture[CLERIC].loadFromFile("resources/tilesets/cleric.png");
+	charTexture[WARRIOR].loadFromFile("resources/tilesets/warrior.png");
+	charTexture[RANGER].loadFromFile("resources/tilesets/ranger.png");
+	charTexture[WIZARD].loadFromFile("resources/tilesets/wizard.png");
+	charTexture[ROGUE].loadFromFile("resources/tilesets/rogue.png");
 	for(int i = 0; i < ANIM_COUNT; i++)
-		animations.push_back(animation(&charTexture, sf::IntRect(0, 32*i, 32, 32), ANIM_FRAMES, ANIM_FRAMES, ANIM_SPEED*ANIM_FRAMES));
+		animations.push_back(animation(&charTexture[pClass], sf::IntRect(0, 32*i, 32, 32), ANIM_FRAMES, ANIM_FRAMES, ANIM_SPEED*ANIM_FRAMES));
 }
 
 player::~player() {

@@ -12,7 +12,7 @@
 
 class player {
 public:
-	enum PlayerType { CLERIC, WARRIOR, RANGER, WIZARD, ROGUE };
+	enum PlayerType { CLERIC = 0, WARRIOR = 1, RANGER = 2, WIZARD = 3, ROGUE = 4 };
 	enum Gender { MALE, FEMALE };
 	enum AnimationStates { IDLE = 0, GESTURE = 1, WALK = 2, ATTACK = 3, DEATH = 4 };
 
@@ -33,7 +33,7 @@ public:
 	void setAnimState(AnimationStates animState) { this->animState = animState; }
 
 private:
-	static sf::Texture charTexture;
+	static sf::Texture charTexture[5];
 
 	static int ANIM_COUNT;
 	static int ANIM_FRAMES;
