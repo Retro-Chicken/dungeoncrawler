@@ -1,14 +1,18 @@
 #include "player.h"
 
-float player::speed = 8;
+float player::speed = 64;
 sf::Texture player::charTexture;
+int player::ANIM_COUNT = 5;
+int player::ANIM_FRAMES = 10;
+float player::ANIM_SPEED = 0.1;
 
 player::player(PlayerType pClass, Gender gender) {
 	this->pClass = pClass;
 	this->gender = gender;
 
-	charTexture.loadFromFile("resources/tilesets/dungeon_tileset.png");
-	animations.push_back(animation(&charTexture, sf::IntRect(193, 368, 16, 32), 1, 1, 10));
+	charTexture.loadFromFile("resources/tilesets/cleric.png");
+	for(int i = 0; i < ANIM_COUNT; i++)
+		animations.push_back(animation(&charTexture, sf::IntRect(0, 32*i, 32, 32), ANIM_FRAMES, ANIM_FRAMES, ANIM_SPEED*ANIM_FRAMES));
 }
 
 player::~player() {
@@ -24,16 +28,18 @@ void player::setPosition(sf::Vector2i position) {
 }
 
 void player::update(float deltaTime) {
+	animState = IDLE;
 	if(!currentPath.isEmpty()) {
-		int sx = util::sgn(currentPath.top().x - position.x);
-		int sy = util::sgn(currentPath.top().y - position.y);
+		animState = WALK;
+		int sx = util::sgn(currentPath.top().x * config::TILE_SIZE - position.x);
+		int sy = util::sgn(currentPath.top().y * config::TILE_SIZE - position.y);
 		position.x += sx*speed*deltaTime;
 		position.y += sy*speed*deltaTime;
-		if(sx*position.x > sx*currentPath.top().x)
-			position.x = currentPath.top().x;
-		if(sy*position.y > sy*currentPath.top().y)
-			position.y = currentPath.top().y;
-		if(sf::Vector2i((int)position.x, (int)position.y) == currentPath.top())
+		if(sx*position.x > sx*(currentPath.top().x * config::TILE_SIZE))
+			position.x = currentPath.top().x * config::TILE_SIZE;
+		if(sy*position.y > sy*(currentPath.top().y * config::TILE_SIZE))
+			position.y = currentPath.top().y * config::TILE_SIZE;
+		if(sf::Vector2i((int)position.x, (int)position.y) == currentPath.top() * (int)config::TILE_SIZE)
 			currentPath.pop();
 	}
 	animations[animState].update(deltaTime);

@@ -79,7 +79,7 @@ private:
 		}
 
 		void addDrawable(drawable* item) {
-			item->setPosition(x, y);
+			item->setPosition(x * config::TILE_SIZE, (y + 1) * config::TILE_SIZE);
 			graphics.insert(item);
 		}
 

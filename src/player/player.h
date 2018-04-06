@@ -6,6 +6,7 @@
 #include "../util.h"
 #include "../ai/path.h"
 #include "../rendertools/animation.h"
+#include "../rendertools/anchor.h"
 
 #include <iostream>
 
@@ -33,6 +34,10 @@ public:
 
 private:
 	static sf::Texture charTexture;
+
+	static int ANIM_COUNT;
+	static int ANIM_FRAMES;
+	static float ANIM_SPEED;
 
 	//	Pixels per second
 	static float speed;

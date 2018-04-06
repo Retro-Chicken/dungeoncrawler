@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "drawable.h"
+#include "anchor.h"
 
 class animation : public drawable {
 public:
@@ -10,6 +11,7 @@ public:
 	animation(int x, int y, sf::Texture* texture, sf::IntRect startingFrame, int columns, int count, float animTime, int layer);
 	animation(sf::Texture* texture, sf::IntRect startingFrame, int columns, int count, float animTime);
 	animation(sf::Texture* texture, sf::IntRect startingFrame, int columns, int count, float animTime, int layer);
+	animation(sf::Texture* texture, sf::IntRect startingFrame, int columns, int count, float animTime, anchor::ANCHOR anchorType);
 	~animation();
 
 	void update(float deltaTime) override;

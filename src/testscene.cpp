@@ -28,7 +28,7 @@ void testscene::update(float deltaTime) {
 			if(evnt.mouseButton.button == sf::Mouse::Left) {
 				if(!captured) {
 					point1 = dungeon::globalToLocal(sf::Mouse::getPosition(*config::WINDOW));
-					character.setPosition(point1);
+					character.setPosition(point1 * (int)config::TILE_SIZE);
 					captured = true;
 				} else {
 					point2 = dungeon::globalToLocal(sf::Mouse::getPosition(*config::WINDOW));
