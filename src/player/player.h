@@ -1,9 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "../config.h"
 #include <SFML/Graphics.hpp>
+#include "../config.h"
+#include "../util.h"
+#include "../ai/path.h"
 #include "../rendertools/animation.h"
+
+#include <iostream>
 
 class player {
 public:
@@ -17,17 +21,30 @@ public:
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
 
-	sf::Vector2i getPosition() { return position; }
-	void setPosition(sf::Vector2i position) { this->position = position; }
+	sf::Vector2f getPosition() { return position; }
+	void setPosition(sf::Vector2f position);
+	void setPosition(sf::Vector2i position);
+
+	void setPath(path newPath) {
+		currentPath = newPath;
+	}
 
 	void setAnimState(AnimationStates animState) { this->animState = animState; }
 
 private:
-	sf::Vector2i position;
+	static sf::Texture charTexture;
+
+	//	Pixels per second
+	static float speed;
+
+	sf::Vector2f position;
 	AnimationStates animState = IDLE;
 	PlayerType pClass = CLERIC;
 	Gender gender = MALE;
-	//animation animations[5];
+
+	path currentPath;
+
+	std::vector<animation> animations;
 };
 
 #endif
