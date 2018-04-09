@@ -3,6 +3,7 @@
 drawable::drawable(int x, int y, sf::Texture* texture, sf::IntRect textureRect) {
 	this->x = x;
 	this->y = y;
+	this->textureRect = textureRect;
 	sprite.setPosition(x * config::TILE_SIZE, (y + 1) * config::TILE_SIZE);
 	anchor::anchorSprite(sprite, origin);
 	this->texture = texture;
@@ -14,6 +15,7 @@ drawable::drawable(int x, int y, sf::Texture* texture, sf::IntRect textureRect, 
 }
 drawable::drawable(sf::Texture* texture, sf::IntRect textureRect) {
 	this->texture = texture;
+	this->textureRect = textureRect;
 	sprite.setTexture(*texture);
 	sprite.setTextureRect(textureRect);
 }
@@ -30,6 +32,19 @@ void drawable::setPosition(int x, int y) {
 
 void drawable::draw(sf::RenderWindow& window) const {
 	window.draw(sprite);
+}
+
+void drawable::draw(sf::RenderWindow& window, bool flipped) {
+	if(!flipped)
+		window.draw(sprite);
+	else {
+		const sf::IntRect& textureRect = sprite.getTextureRect();
+		sprite.setTextureRect(sf::IntRect(textureRect.left + textureRect.width,
+			textureRect.top, -textureRect.width, textureRect.height));
+		window.draw(sprite);
+		sprite.setTextureRect(sf::IntRect(textureRect.left + textureRect.width,
+			textureRect.top, -textureRect.width, textureRect.height));
+	}
 }
 
 void drawable::draw(int x, int y, sf::RenderWindow& window) {

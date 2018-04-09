@@ -44,6 +44,7 @@ private:
 
 	sf::Vector2f position;
 	AnimationStates animState = IDLE;
+	bool walkingBackwards = false;
 	PlayerType pClass = CLERIC;
 	Gender gender = MALE;
 
