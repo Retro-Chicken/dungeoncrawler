@@ -25,9 +25,7 @@ public:
 	void setPosition(sf::Vector2f position);
 	void setPosition(sf::Vector2i position);
 
-	void setPath(path newPath) {
-		currentPath = newPath;
-	}
+	void setPath(path newPath);
 
 	void setAnimState(AnimationStates animState) { this->animState = animState; }
 

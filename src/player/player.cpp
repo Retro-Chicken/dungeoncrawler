@@ -31,6 +31,11 @@ void player::setPosition(sf::Vector2i position) {
 	this->position.y = position.y;
 }
 
+void player::setPath(path newPath) {
+	currentPath = newPath;
+	walkingBackwards = newPath.points[newPath.points.size()].x * config::TILE_SIZE < (int)position.x;
+}
+
 void player::update(float deltaTime) {
 	animState = IDLE;
 	if(!currentPath.isEmpty()) {

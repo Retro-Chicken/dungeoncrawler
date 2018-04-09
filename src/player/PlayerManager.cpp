@@ -10,7 +10,7 @@ PlayerManager::PlayerManager(sf::RenderWindow& window) : character(player::RANGE
 
 }
 PlayerManager::~PlayerManager() {
-	delete map;
+	
 }
 
 void PlayerManager::update(float deltaTime) {
