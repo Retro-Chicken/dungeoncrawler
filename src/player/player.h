@@ -7,8 +7,7 @@
 #include "../ai/path.h"
 #include "../rendertools/animation.h"
 #include "../rendertools/anchor.h"
-
-#include <iostream>
+#include <math.h>
 
 class player {
 public:

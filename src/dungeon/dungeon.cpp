@@ -7,6 +7,13 @@ const sf::IntRect dungeon::torch::TORCH = sf::IntRect(176, 254, 16, 32);
 sf::Texture dungeon::tileTexture;
 
 dungeon::tile& dungeon::getTile(int x, int y) { return map[y * dungeon::MAP_WIDTH + x]; }
+sf::Vector2i dungeon::getStart() {
+	for(int x = 0; x < MAP_WIDTH; x++)
+		for(int y = 0; y < MAP_HEIGHT; y++)
+			if(getTile(x, y).walkable)
+				return sf::Vector2i(x, y);
+	return sf::Vector2i(0, 0);
+}
 
 dungeon::dungeon() {
 	for(int i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++)

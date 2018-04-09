@@ -10,7 +10,6 @@
 #include "ai/astar.h"
 #include "ai/path.h"
 #include "player/player.h"
-#include <iostream>
 
 class testscene : public Scene {
 public:

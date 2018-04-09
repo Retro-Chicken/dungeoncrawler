@@ -40,9 +40,9 @@ void player::update(float deltaTime) {
 		walkingBackwards = sx < 0 || (sx == 0 && walkingBackwards);
 		position.x += sx*speed*deltaTime;
 		position.y += sy*speed*deltaTime;
-		if(sx*position.x > sx*(currentPath.top().x * config::TILE_SIZE))
+		if(fabs(position.x - currentPath.top().x * config::TILE_SIZE) < 1)
 			position.x = currentPath.top().x * config::TILE_SIZE;
-		if(sy*position.y > sy*(currentPath.top().y * config::TILE_SIZE))
+		if(fabs(position.y - currentPath.top().y * config::TILE_SIZE) < 1)
 			position.y = currentPath.top().y * config::TILE_SIZE;
 		if(sf::Vector2i((int)position.x, (int)position.y) == currentPath.top() * (int)config::TILE_SIZE)
 			currentPath.pop();
@@ -52,5 +52,5 @@ void player::update(float deltaTime) {
 }
 
 void player::draw(sf::RenderWindow& window) {
-	animations[animState].draw(window, animState == WALK ? walkingBackwards : false);
+	animations[animState].draw(window, walkingBackwards);
 }
