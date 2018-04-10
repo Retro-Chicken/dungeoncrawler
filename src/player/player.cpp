@@ -33,7 +33,8 @@ void player::setPosition(sf::Vector2i position) {
 
 void player::setPath(path newPath) {
 	currentPath = newPath;
-	walkingBackwards = newPath.points[newPath.points.size()].x * config::TILE_SIZE < (int)position.x;
+	if(!newPath.isEmpty())
+		walkingBackwards = newPath.points[newPath.points.size()].x * config::TILE_SIZE < (int)position.x;
 }
 
 void player::update(float deltaTime) {

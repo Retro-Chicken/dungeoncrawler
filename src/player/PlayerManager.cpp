@@ -10,7 +10,7 @@ PlayerManager::PlayerManager(sf::RenderWindow& window) : character(player::RANGE
 
 }
 PlayerManager::~PlayerManager() {
-	
+
 }
 
 void PlayerManager::update(float deltaTime) {
@@ -21,7 +21,7 @@ void PlayerManager::update(float deltaTime) {
 				dungeon::globalToLocal(config::WINDOW->mapPixelToCoords(sf::Mouse::getPosition(*config::WINDOW))),
 				[this](int x, int y)->bool{ return !map->isWalkable(sf::Vector2i(x, y)); }));
 	character.update(deltaTime);
-	view->setCenter(character.getPosition());
+	view->setCenter(character.getIntPosition());
 }
 void PlayerManager::draw(sf::RenderWindow& window) {
 	character.draw(window);

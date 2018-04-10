@@ -50,6 +50,8 @@ bool operator<(const node & a, const node & b)
 // A-star algorithm.
 path astar::aStar(const sf::Vector2i& start, const sf::Vector2i& end,
 	std::function<bool(int, int)> isBlocked) {
+    if(isBlocked(start.x, start.y) || isBlocked(end.x, end.y))
+        return path();
 	static int closed_nodes_map[n][m]; // Map of closed (tried-out) nodes
 	static int open_nodes_map[n][m]; // Map of open (not-yet-tried) nodes
 	static int dir_map[n][m]; // Map of directions

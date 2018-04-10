@@ -22,6 +22,7 @@ public:
 	void draw(sf::RenderWindow& window);
 
 	sf::Vector2f getPosition() { return position; }
+	sf::Vector2f getIntPosition() { return sf::Vector2f((int)position.x, (int)position.y); }
 	void setPosition(sf::Vector2f position);
 	void setPosition(sf::Vector2i position);
 
