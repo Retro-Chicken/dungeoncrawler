@@ -36,6 +36,13 @@ void dungeon::draw(sf::RenderWindow& window) {
 	for(int x = 0; x < MAP_WIDTH; x++)
 		for(int y = 0; y < MAP_HEIGHT; y++)
 			getTile(x, y).draw(window);
+	if(highlighted.x < 0) {
+		sf::RectangleShape highlight(sf::Vector2f(config::TILE_SIZE, config::TILE_SIZE));
+		highlight.setPosition(sf::Vector2f(highlighted.x * config::TILE_SIZE, highlighted.y * config::TILE_SIZE));
+		highlight.setFillColor(sf:Color(179, 230, 255, 100));
+		window.draw(highlight);
+		highlighted.x = -1;
+	}
 }
 
 void dungeon::generateDungeon() {
