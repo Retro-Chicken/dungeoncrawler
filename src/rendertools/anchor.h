@@ -7,7 +7,8 @@
 class anchor {
 public:
 	enum ANCHOR { ANCHOR_TOP_LEFT, ANCHOR_TOP_RIGHT,
-		ANCHOR_BOTTOM_LEFT, ANCHOR_BOTTOM_RIGHT, ANCHOR_CENTER };
+		ANCHOR_BOTTOM_LEFT, ANCHOR_BOTTOM_RIGHT, ANCHOR_CENTER,
+	 	ANCHOR_PLAYER };
 
 	static void anchorSprite(sf::Sprite& sprite, ANCHOR type) {
 		switch(type) {
@@ -28,6 +29,9 @@ public:
 			case ANCHOR_CENTER:
 				sprite.setPosition(sprite.getPosition().x - sprite.getTextureRect().width/2,
 					sprite.getPosition().y - sprite.getTextureRect().height/2);
+				break;
+			case ANCHOR_PLAYER:
+				sprite.setPosition(sprite.getPosition().x - 8, sprite.getPosition().y - 24);
 				break;
 		}
 	}

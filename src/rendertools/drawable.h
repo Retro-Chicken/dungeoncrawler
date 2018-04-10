@@ -25,6 +25,7 @@ public:
 	void setPosition(int x, int y);
 
 	void draw(sf::RenderWindow& window) const;
+	void draw(sf::RenderWindow& window, bool flipped);
 	void draw(int x, int y, sf::RenderWindow& window);
 
 	virtual void update(float deltaTime) {}
@@ -32,6 +33,7 @@ protected:
 	anchor::ANCHOR origin = anchor::ANCHOR_BOTTOM_LEFT;
 	sf::Texture* texture;
 	sf::Sprite sprite;
+	sf::IntRect textureRect;
 };
 
 #endif

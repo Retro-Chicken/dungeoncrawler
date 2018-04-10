@@ -16,7 +16,7 @@ player::player(PlayerType pClass, Gender gender) {
 	charTexture[WIZARD].loadFromFile("resources/tilesets/wizard.png");
 	charTexture[ROGUE].loadFromFile("resources/tilesets/rogue.png");
 	for(int i = 0; i < ANIM_COUNT; i++)
-		animations.push_back(animation(&charTexture[pClass], sf::IntRect(0, 32*i, 32, 32), ANIM_FRAMES, ANIM_FRAMES, ANIM_SPEED*ANIM_FRAMES));
+		animations.push_back(animation(&charTexture[pClass], sf::IntRect(0, 32*ANIM_COUNT*(gender == FEMALE) + 32*i, 32, 32), ANIM_FRAMES, ANIM_FRAMES, ANIM_SPEED*ANIM_FRAMES, anchor::ANCHOR_PLAYER));
 }
 
 player::~player() {
@@ -31,25 +31,32 @@ void player::setPosition(sf::Vector2i position) {
 	this->position.y = position.y;
 }
 
+void player::setPath(path newPath) {
+	currentPath = newPath;
+	if(!newPath.isEmpty())
+		walkingBackwards = newPath.points[newPath.points.size()].x * config::TILE_SIZE < (int)position.x;
+}
+
 void player::update(float deltaTime) {
 	animState = IDLE;
 	if(!currentPath.isEmpty()) {
 		animState = WALK;
 		int sx = util::sgn(currentPath.top().x * config::TILE_SIZE - position.x);
 		int sy = util::sgn(currentPath.top().y * config::TILE_SIZE - position.y);
+		walkingBackwards = sx < 0 || (sx == 0 && walkingBackwards);
 		position.x += sx*speed*deltaTime;
 		position.y += sy*speed*deltaTime;
-		if(sx*position.x > sx*(currentPath.top().x * config::TILE_SIZE))
+		if(fabs(position.x - currentPath.top().x * config::TILE_SIZE) < 1)
 			position.x = currentPath.top().x * config::TILE_SIZE;
-		if(sy*position.y > sy*(currentPath.top().y * config::TILE_SIZE))
+		if(fabs(position.y - currentPath.top().y * config::TILE_SIZE) < 1)
 			position.y = currentPath.top().y * config::TILE_SIZE;
 		if(sf::Vector2i((int)position.x, (int)position.y) == currentPath.top() * (int)config::TILE_SIZE)
 			currentPath.pop();
 	}
 	animations[animState].update(deltaTime);
+	animations[animState].setPosition((int)position.x, (int)position.y);
 }
 
 void player::draw(sf::RenderWindow& window) {
-	animations[animState].setPosition((int)position.x, (int)position.y);
-	animations[animState].draw(window);
+	animations[animState].draw(window, walkingBackwards);
 }

@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "mainscene.h"
 #include "scenes/SceneManager.h"
 #include "testscene.h"
 #include "config.h"
@@ -11,8 +12,8 @@ int main() {
 		cout << "[!] Error initializing configuration.";
 
 	//	Create window for the game.
-	sf::RenderWindow window(sf::VideoMode(dungeon::MAP_WIDTH * config::TILE_SIZE,
-		dungeon::MAP_HEIGHT * config::TILE_SIZE), "Dungeon Crawler");
+	sf::RenderWindow window(sf::VideoMode(config::WINDOW_WIDTH,
+		config::WINDOW_HEIGHT), "Dungeon Crawler");
 	config::setWindow(&window);
 
 	//	Create clock for keeping track of time in between frames.
@@ -26,7 +27,8 @@ int main() {
 	srand(time(NULL));
 
 	//	Create scenes and load them into SceneManager.
-	testscene test;
+	//testscene test;
+	mainscene test(window);
 	std::vector<Scene*> scenes = { &test };
 	SceneManager manager(scenes);
 

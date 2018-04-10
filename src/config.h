@@ -4,6 +4,10 @@
 #include <SFML/Graphics.hpp>
 
 namespace config {
+	//	Size of the window.
+	extern unsigned WINDOW_HEIGHT;
+	extern unsigned WINDOW_WIDTH;
+
 	//	Size of the view port of the user.
 	extern unsigned VIEW_HEIGHT;
 	extern unsigned VIEW_WIDTH;

@@ -15,6 +15,8 @@ public:
 	void update(float deltaTime);
 	void draw(sf::RenderWindow& window);
 
+	sf::Vector2i getStart();
+
 	static const int MAP_HEIGHT = 50, MAP_WIDTH = 75;
 
 private:
@@ -153,6 +155,9 @@ public:
 	}
 	static sf::Vector2i globalToLocal(sf::Vector2i mouseCoords) {
 		return sf::Vector2i(mouseCoords.x / config::TILE_SIZE, mouseCoords.y / config::TILE_SIZE);
+	}
+	static sf::Vector2i globalToLocal(sf::Vector2f mouseCoords) {
+		return sf::Vector2i(((int)mouseCoords.x) / config::TILE_SIZE, ((int)mouseCoords.y) / config::TILE_SIZE);
 	}
 };
 
