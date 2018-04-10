@@ -7,6 +7,8 @@
 #include "../rendertools/drawable.h"
 #include "../rendertools/animation.h"
 
+#include <iostream>
+
 class dungeon {
 public:
 	dungeon();
@@ -146,7 +148,11 @@ private:
 
 	//	TODO: Figure out why I can only use a vector and not an array.
 	std::vector<tile> map;
+
+	sf::Vector2i highlighted;
 public:
+	void setHighlighted(sf::Vector2i highlighted) { this->highlighted = highlighted; }
+
 	tile& getTile(int x, int y);
 	bool isWalkable(sf::Vector2i point) {
 		if(point.x >= 0 && point.x < MAP_WIDTH && point.y >= 0 && point.y < MAP_HEIGHT)
