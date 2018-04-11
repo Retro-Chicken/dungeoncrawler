@@ -1,24 +1,18 @@
 #include "dungeon.h"
 
-const sf::IntRect dungeon::wall::WALL = sf::IntRect(0, 16, 16, 32);
-const sf::IntRect dungeon::floor::FLOOR = sf::IntRect(0, 64, 16, 16);
-const sf::IntRect dungeon::banner::BANNER = sf::IntRect(288, 128, 16, 32);
-const sf::IntRect dungeon::torch::TORCH = sf::IntRect(176, 254, 16, 32);
-sf::Texture dungeon::tileTexture;
-
-dungeon::tile& dungeon::getTile(int x, int y) { return map[y * dungeon::MAP_WIDTH + x]; }
+tile& dungeon::getTile(int x, int y) { return map[y * params::MAP_WIDTH + x]; }
 sf::Vector2i dungeon::getStart() {
-	for(int x = 0; x < MAP_WIDTH; x++)
-		for(int y = 0; y < MAP_HEIGHT; y++)
+	for(int x = 0; x < params::MAP_WIDTH; x++)
+		for(int y = 0; y < params::MAP_HEIGHT; y++)
 			if(getTile(x, y).walkable)
 				return sf::Vector2i(x, y);
 	return sf::Vector2i(0, 0);
 }
 
 dungeon::dungeon() {
-	for(int i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++)
-		map.push_back(tile(i % MAP_WIDTH, i / MAP_WIDTH));
-	tileTexture.loadFromFile("resources/tilesets/dungeon_tileset.png");
+	for(int i = 0; i < params::MAP_WIDTH * params::MAP_HEIGHT; i++)
+		map.push_back(tile(i % params::MAP_WIDTH, i / params::MAP_WIDTH));
+	params::tileTexture.loadFromFile("resources/tilesets/dungeon_tileset.png");
 	generateDungeon();
 }
 
@@ -27,14 +21,14 @@ dungeon::~dungeon() {
 }
 
 void dungeon::update(float deltaTime) {
-	for(int x = 0; x < MAP_WIDTH; x++)
-		for(int y = 0; y < MAP_HEIGHT; y++)
+	for(int x = 0; x < params::MAP_WIDTH; x++)
+		for(int y = 0; y < params::MAP_HEIGHT; y++)
 			getTile(x, y).update(deltaTime);
 }
 
 void dungeon::draw(sf::RenderWindow& window) {
-	for(int x = 0; x < MAP_WIDTH; x++)
-		for(int y = 0; y < MAP_HEIGHT; y++)
+	for(int x = 0; x < params::MAP_WIDTH; x++)
+		for(int y = 0; y < params::MAP_HEIGHT; y++)
 			getTile(x, y).draw(window);
 }
 
@@ -47,13 +41,13 @@ void dungeon::generateDungeon() {
 static const int MAX_ROOM_ATTEMPTS = 100;
 void dungeon::generateRooms() {
 	std::vector<room> rooms;
-	int roomCount = rand() % (MAX_ROOMS - MIN_ROOMS) + MIN_ROOMS;
+	int roomCount = rand() % (params::MAX_ROOMS - params::MIN_ROOMS) + params::MIN_ROOMS;
 	int attempts = 0;
 	while(rooms.size() < roomCount && attempts < MAX_ROOM_ATTEMPTS) {
-		int w = rand() % (MAX_ROOM_WIDTH - MIN_ROOM_WIDTH + 1) + MIN_ROOM_WIDTH;
-		int h = rand() % (MAX_ROOM_HEIGHT - MIN_ROOM_HEIGHT) + MIN_ROOM_HEIGHT;
-		int x = rand() % (MAP_WIDTH - w);
-		int y = rand() % (MAP_HEIGHT - h - 1) + 1;
+		int w = rand() % (params::MAX_ROOM_WIDTH - params::MIN_ROOM_WIDTH + 1) + params::MIN_ROOM_WIDTH;
+		int h = rand() % (params::MAX_ROOM_HEIGHT - params::MIN_ROOM_HEIGHT) + params::MIN_ROOM_HEIGHT;
+		int x = rand() % (params::MAP_WIDTH - w);
+		int y = rand() % (params::MAP_HEIGHT - h - 1) + 1;
 		room curRoom(x, y, w, h);
 
 		bool failed = false;
@@ -84,13 +78,13 @@ static int fill[] = { 0, 61, 62, 63, 64 };
 //	corridors meet.
 void dungeon::hCorridor(int x1, int x2, int y) {
 	for(int x = std::min(x1, x2); x <= std::max(x1, x2); x++) {
-		getTile(x, y).forceDrawable(new dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+		getTile(x, y).forceDrawable(new decorations::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
 		getTile(x, y).setWalkable(true);
 	}
 }
 void dungeon::vCorridor(int y1, int y2, int x) {
 	for(int y = std::min(y1, y2); y <= std::max(y1, y2); y++) {
-		getTile(x, y).forceDrawable(new dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+		getTile(x, y).forceDrawable(new decorations::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
 		getTile(x, y).setWalkable(true);
 	}
 }
@@ -114,11 +108,11 @@ void dungeon::tileRoom(room area) {
 		for(int i = area.interior.left; i < area.interior.left + area.interior.width; i++) {
 			if(i == area.interior.left || i == area.interior.left + area.interior.width - 1)
 				for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++) {
-					getTile(i, j).addDrawable(new dungeon::floor(69));
+					getTile(i, j).addDrawable(new decorations::floor(69));
 					getTile(i, j).setWalkable(true);
 				}
 			else {
-				getTile(i, area.interior.top).addDrawable(new dungeon::floor(69));
+				getTile(i, area.interior.top).addDrawable(new decorations::floor(69));
 				getTile(i, area.interior.top).setWalkable(true);
 			}
 		}
@@ -133,25 +127,25 @@ void dungeon::tileRoom(room area) {
 		for(int j = area.interior.top; j < area.interior.top + area.interior.height; j++) {
 			if(i == area.interior.left) {
 				if(j == area.interior.top) {
-					getTile(i, j).addDrawable(new dungeon::floor(topLeftCorner[rand() % (sizeof(topLeftCorner)/sizeof(int))]));
+					getTile(i, j).addDrawable(new decorations::floor(topLeftCorner[rand() % (sizeof(topLeftCorner)/sizeof(int))]));
 					getTile(i, j).setWalkable(true);
 				} else {
-					getTile(i, j).addDrawable(new dungeon::floor(leftEdge[rand() % (sizeof(leftEdge)/sizeof(int))]));
+					getTile(i, j).addDrawable(new decorations::floor(leftEdge[rand() % (sizeof(leftEdge)/sizeof(int))]));
 					getTile(i, j).setWalkable(true);
 				}
 			} else if(i == area.interior.left + area.interior.width - 1) {
 				if(j == area.interior.top) {
-					getTile(i, j).addDrawable(new dungeon::floor(topRightCorner[rand() % (sizeof(topRightCorner)/sizeof(int))]));
+					getTile(i, j).addDrawable(new decorations::floor(topRightCorner[rand() % (sizeof(topRightCorner)/sizeof(int))]));
 					getTile(i, j).setWalkable(true);
 				} else {
-					getTile(i, j).addDrawable(new dungeon::floor(rightEdge[rand() % (sizeof(rightEdge)/sizeof(int))]));
+					getTile(i, j).addDrawable(new decorations::floor(rightEdge[rand() % (sizeof(rightEdge)/sizeof(int))]));
 					getTile(i, j).setWalkable(true);
 				}
 			} else if(j == area.interior.top) {
-				getTile(i, j).addDrawable(new dungeon::floor(topEdge[rand() % (sizeof(topEdge)/sizeof(int))]));
+				getTile(i, j).addDrawable(new decorations::floor(topEdge[rand() % (sizeof(topEdge)/sizeof(int))]));
 				getTile(i, j).setWalkable(true);
 			} else {
-				getTile(i, j).addDrawable(new dungeon::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
+				getTile(i, j).addDrawable(new decorations::floor(fill[rand() % (sizeof(fill)/sizeof(int))]));
 				getTile(i, j).setWalkable(true);
 			}
 		}
@@ -164,10 +158,10 @@ void dungeon::generateWalls() {
 	*	Count serves to loop through which wall tile we use.
 	*/
 	int count = 1;
-	for(int y = 0; y < MAP_HEIGHT - 1; y++)
-		for(int x = 0; x < MAP_WIDTH; x++) {
+	for(int y = 0; y < params::MAP_HEIGHT - 1; y++)
+		for(int x = 0; x < params::MAP_WIDTH; x++) {
 			if(getTile(x, y).isEmpty() && !getTile(x, y + 1).isEmpty()) {
-				getTile(x, y).addDrawable(new wall(count));
+				getTile(x, y).addDrawable(new decorations::wall(count));
 				count = 1 + count % 4;
 			} else
 				count = 1;
@@ -179,11 +173,11 @@ void dungeon::decorateRoom(room area) {
 }
 
 void dungeon::generateDecorations() {
-	for(int x = 0; x < MAP_WIDTH; x++)
-		for(int y = 0; y < MAP_HEIGHT; y++) {
+	for(int x = 0; x < params::MAP_WIDTH; x++)
+		for(int y = 0; y < params::MAP_HEIGHT; y++) {
 			if(getTile(x, y).getTag() == "wall" && rand() % 20 == 0)
-				getTile(x, y).addDrawable(new banner(rand() % banner::COUNT));
+				getTile(x, y).addDrawable(new decorations::banner(rand() % decorations::banner::COUNT));
 			if(getTile(x, y).getTag() == "wall" && rand() % 20 == 0)
-				getTile(x, y).addDrawable(new torch());
+				getTile(x, y).addDrawable(new decorations::torch());
 		}
 }
