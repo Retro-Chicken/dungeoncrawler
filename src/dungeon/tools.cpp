@@ -1,27 +1,54 @@
 #include "tools.h"
 
 namespace decorations {
-	const sf::IntRect wall::WALL = sf::IntRect(0, 16, 16, 32);
-	const sf::IntRect floor::FLOOR = sf::IntRect(0, 64, 16, 16);
-	const sf::IntRect banner::BANNER = sf::IntRect(288, 128, 16, 32);
-	const sf::IntRect torch::TORCH = sf::IntRect(176, 254, 16, 32);
+	sf::IntRect rects[DECORATION_COUNT];
+	int columns[DECORATION_COUNT];
+	int counts[DECORATION_COUNT];
+	std::string tags[DECORATION_COUNT];
+	int layers[DECORATION_COUNT];
 
-	wall::wall(int index) : drawable(&params::tileTexture, sf::IntRect(WALL.left + WALL.width * (index % COLUMNS),
-		WALL.top + WALL.height * (index/COLUMNS), WALL.width, WALL.height), 0) {
-		tag = "wall";
+	void initialize() {
+		rects[WALL] = sf::IntRect(0, 16, 16, 32);
+		columns[WALL] = 7;
+		counts[WALL] = 7;
+		tags[WALL] = "wall";
+		layers[WALL] = 0;
+
+		rects[FLOOR] = sf::IntRect(0, 64, 16, 16);
+		columns[FLOOR] = 30;
+		counts[FLOOR] = 72;
+		tags[FLOOR] = "floor";
+		layers[FLOOR] = 0;
+
+		rects[BANNER] = sf::IntRect(288, 128, 16, 32);
+		columns[BANNER] = 6;
+		counts[BANNER] = 6;
+		tags[BANNER] = "banner";
+		layers[BANNER] = 1;
+
+		rects[TORCH] = sf::IntRect(176, 254, 16, 32);
+		columns[TORCH] = 3;
+		counts[TORCH] = 3;
+		tags[TORCH] = "torch";
+		layers[TORCH] = 1;
 	}
 
-	floor::floor(int index) : drawable(&params::tileTexture, sf::IntRect(FLOOR.left + FLOOR.width * (index % COLUMNS),
-		FLOOR.top + FLOOR.height * (index/COLUMNS), FLOOR.width, FLOOR.height), 0) {
-		tag = "floor";
+	drawable* instantiate(DecorationType type, int index) {
+		if(type == TORCH)
+			return new animateddecoration(rects[type], columns[type], counts[type], 0.5f, tags[type], layers[type]);
+		return new staticdecoration(rects[type], columns[type], counts[type], index, tags[type], layers[type]);
+	}
+	drawable* instantiate(DecorationType type) {
+		return instantiate(type, 0);
 	}
 
-	banner::banner(int index) : drawable(&params::tileTexture, sf::IntRect(BANNER.left + BANNER.width * (index % COLUMNS),
-		BANNER.top + BANNER.height * (index/COLUMNS), BANNER.width, BANNER.height), 1) {
-		tag = "banner";
+	staticdecoration::staticdecoration(sf::IntRect spriteRect, int columns, int count, int index, std::string tag, int layer)
+		: drawable(&params::tileTexture, sf::IntRect(spriteRect.left + spriteRect.width * (index % columns),
+			spriteRect.top + spriteRect.height * (index/columns), spriteRect.width, spriteRect.height), layer) {
+		this->tag = tag;
 	}
-
-	torch::torch() : animation(&params::tileTexture, TORCH, COLUMNS, COUNT, 0.5, 1) {
-		tag = "torch";
+	animateddecoration::animateddecoration(sf::IntRect spriteRect, int columns, int count, float animTime, std::string tag, int layer)
+		: animation(&params::tileTexture, spriteRect, columns, count, animTime, layer) {
+		this->tag = tag;
 	}
 };

@@ -7,30 +7,29 @@
 #include "../rendertools/animation.h"
 
 namespace decorations {
-	class wall : public drawable {
+	const int DECORATION_COUNT = 6;
+
+	enum DecorationType { WALL, FLOOR, BANNER, TORCH };
+
+	extern void initialize();
+
+	extern drawable* instantiate(DecorationType type);
+	extern drawable* instantiate(DecorationType type, int index);
+
+	class staticdecoration : public drawable {
 	public:
-		static const sf::IntRect WALL;
-		static const int COLUMNS = 7, COUNT = 7;
-		wall(int index);
+		staticdecoration(sf::IntRect spriteRect, int columns, int count, int index, std::string tag, int layer);
 	};
-	class floor : public drawable {
+	class animateddecoration : public animation {
 	public:
-		static const sf::IntRect FLOOR;
-		static const int COLUMNS = 30, COUNT = 72;
-		floor(int index);
+		animateddecoration(sf::IntRect spriteRect, int columns, int count, float animTime, std::string tag, int layer);
 	};
-	class banner : public drawable {
-	public:
-		static const sf::IntRect BANNER;
-		static const int COLUMNS = 6, COUNT = 6;
-		banner(int index);
-	};
-	class torch : public animation {
-	public:
-		static const sf::IntRect TORCH;
-		static const int COLUMNS = 3, COUNT = 3;
-		torch();
-	};
+
+	extern sf::IntRect rects[DECORATION_COUNT];
+	extern int columns[DECORATION_COUNT];
+	extern int counts[DECORATION_COUNT];
+	extern std::string tags[DECORATION_COUNT];
+	extern int layers[DECORATION_COUNT];
 };
 
 namespace tools {
