@@ -6,8 +6,11 @@ const sf::IntRect dungeon::banner::BANNER = sf::IntRect(288, 128, 16, 32);
 const sf::IntRect dungeon::torch::TORCH = sf::IntRect(176, 254, 16, 32);
 sf::Texture dungeon::tileTexture;
 
+bool dungeon::inBounds(int x, int y) {
+	return !(x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT);
+}
 dungeon::tile& dungeon::getTile(int x, int y) {
-	if(x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT)
+	if(!inBounds(x, y))
 		return map[0];
 	return map[y * dungeon::MAP_WIDTH + x];
 }
@@ -19,7 +22,7 @@ sf::Vector2i dungeon::getStart() {
 	return sf::Vector2i(0, 0);
 }
 
-dungeon::dungeon() : highlighted(-1, -1) {
+dungeon::dungeon() {
 	for(int i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++)
 		map.push_back(tile(i % MAP_WIDTH, i / MAP_WIDTH));
 	tileTexture.loadFromFile("resources/tilesets/dungeon_tileset.png");
@@ -40,14 +43,16 @@ void dungeon::draw(sf::RenderWindow& window) {
 	for(int x = 0; x < MAP_WIDTH; x++)
 		for(int y = 0; y < MAP_HEIGHT; y++)
 			getTile(x, y).draw(window);
-	if(highlighted.x >= 0 && getTile(highlighted.x, highlighted.y).walkable) {
-		//std::cout << "Highlighting" << std::endl;
-		sf::RectangleShape highlight(sf::Vector2f(config::TILE_SIZE, config::TILE_SIZE));
-		highlight.setPosition(sf::Vector2f(highlighted.x * config::TILE_SIZE, highlighted.y * config::TILE_SIZE));
-		highlight.setFillColor(sf::Color(179, 230, 255, 150));
-		window.draw(highlight);
-		highlighted.x = -1;
+	for(int i = 0; i < highlighted.size(); i++) {
+		if(inBounds(highlighted[i].x, highlighted[i].y) && getTile(highlighted[i].x, highlighted[i].y).walkable) {
+			sf::RectangleShape highlight(sf::Vector2f(config::TILE_SIZE, config::TILE_SIZE));
+			highlight.setPosition(sf::Vector2f(highlighted[i].x * config::TILE_SIZE, highlighted[i].y * config::TILE_SIZE));
+			highlight.setFillColor(highlightColor[i]);
+			window.draw(highlight);
+		}
 	}
+	highlighted.clear();
+	highlightColor.clear();
 }
 
 void dungeon::generateDungeon() {

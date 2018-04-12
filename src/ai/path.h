@@ -15,8 +15,9 @@ public:
 
 	sf::Vector2i top();
 	sf::Vector2i pop();
+	sf::Vector2i end();
 
-	bool isEmpty() { return points.empty(); }
+	bool isEmpty();
 
 	std::vector<sf::Vector2i> points;
 

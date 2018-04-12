@@ -149,9 +149,15 @@ private:
 	//	TODO: Figure out why I can only use a vector and not an array.
 	std::vector<tile> map;
 
-	sf::Vector2i highlighted;
+	std::vector<sf::Vector2i> highlighted;
+	std::vector<sf::Color> highlightColor;
 public:
-	void setHighlighted(sf::Vector2i highlighted) { this->highlighted = highlighted; }
+	void addHighlighted(sf::Vector2i highlighted, sf::Color highlightColor) {
+		this->highlighted.push_back(highlighted);
+		this->highlightColor.push_back(highlightColor);
+	}
+
+	bool inBounds(int x, int y);
 
 	tile& getTile(int x, int y);
 	bool isWalkable(sf::Vector2i point) {

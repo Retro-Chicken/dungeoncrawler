@@ -24,6 +24,16 @@ sf::Vector2i path::top() {
 		return sf::Vector2i(-1, -1);
 }
 
+sf::Vector2i path::end() {
+	if(!points.empty())
+		return points[points.size() - 1];
+	return sf::Vector2i(-1, -1);
+}
+
+bool path::isEmpty() {
+	return points.empty();
+}
+
 std::string path::toString() {
 	std::string result = "";
 	for(sf::Vector2i point : points)

@@ -29,6 +29,9 @@ public:
 
 	void setAnimState(AnimationStates animState) { this->animState = animState; }
 
+	path getPath() { return currentPath; }
+	bool pathEmpty() { return currentPath.isEmpty(); }
+
 private:
 	static sf::Texture charTexture[5];
 

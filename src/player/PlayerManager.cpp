@@ -1,4 +1,5 @@
 #include "PlayerManager.h"
+#include <iostream>
 
 PlayerManager::PlayerManager(sf::RenderWindow& window, sf::View* view) : PlayerManager(window) {
 		this->view = view;
@@ -22,7 +23,9 @@ void PlayerManager::update(float deltaTime) {
 				[this](int x, int y)->bool{ return !map->isWalkable(sf::Vector2i(x, y)); }));
 	character.update(deltaTime);
 	view->setCenter(character.getPosition());
-	map->setHighlighted(dungeon::globalToLocal(config::WINDOW->mapPixelToCoords(sf::Mouse::getPosition(*config::WINDOW))));
+	if(!character.pathEmpty())
+		map->addHighlighted(character.getPath().end(), sf::Color(0, 0, 200, 40));
+	map->addHighlighted(dungeon::globalToLocal(config::WINDOW->mapPixelToCoords(sf::Mouse::getPosition(*config::WINDOW))), sf::Color(0, 200, 0, 40));
 }
 void PlayerManager::draw(sf::RenderWindow& window) {
 	character.draw(window);
