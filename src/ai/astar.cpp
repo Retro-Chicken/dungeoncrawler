@@ -1,5 +1,8 @@
 #include "astar.h"
 
+//int astar::dx[astar::dir] = {1, 1, 0, -1, -1, -1, 0, 1};
+//int astar::dy[astar::dir] = {0, 1, 1, 1, 0, -1, -1, -1};
+
 int astar::dx[astar::dir] = {1, 0, -1, 0};
 int astar::dy[astar::dir] = {0, 1, 0, -1};
 
