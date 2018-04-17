@@ -1,14 +1,16 @@
 #include "tools.h"
 
 namespace decorations {
+	void decorateRoom(tools::room area) {
+		if(rand() <= )
+	}
+
 	sf::IntRect rects[DECORATION_COUNT];
 	int columns[DECORATION_COUNT];
 	int counts[DECORATION_COUNT];
 	std::string tags[DECORATION_COUNT];
 	int layers[DECORATION_COUNT];
 	float animTimes[ANIM_DECORATION_COUNT];
-
-	void decorateRoom(tools::room area);
 
 	void initialize() {
 		rects[WALL] = sf::IntRect(0, 16, 16, 32);
