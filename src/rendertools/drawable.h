@@ -15,6 +15,8 @@ public:
 		return this->layer < obj.layer;
 	}
 
+	sf::IntRect getTextureRect() { return textureRect; }
+
 	void setAnchor(anchor::ANCHOR origin) { this->origin = origin; }
 
 	drawable(int x, int y, sf::Texture* texture, sf::IntRect textureRect);

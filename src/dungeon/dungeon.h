@@ -2,6 +2,7 @@
 #define DUNGEON_H
 
 #include <SFML/Graphics.hpp>
+#include <set>
 #include "../config.h"
 #include "../rendertools/drawable.h"
 #include "../rendertools/animation.h"
@@ -36,6 +37,10 @@ private:
 
 	//	TODO: Figure out why I can only use a vector and not an array.
 	std::vector<tile> map;
+
+	struct drawablecompare {
+		bool operator()(const drawable* lhs, const drawable* rhs) const  { return *lhs < *rhs; }
+	};
 public:
 	tile& getTile(int x, int y);
 	bool isWalkable(sf::Vector2i point) {

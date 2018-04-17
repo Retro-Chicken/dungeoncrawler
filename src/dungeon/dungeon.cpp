@@ -27,9 +27,13 @@ void dungeon::update(float deltaTime) {
 }
 
 void dungeon::draw(sf::RenderWindow& window) {
+	std::multiset<drawable*, drawablecompare> graphics;
 	for(int x = 0; x < params::MAP_WIDTH; x++)
 		for(int y = 0; y < params::MAP_HEIGHT; y++)
-			getTile(x, y).draw(window);
+			for(drawable* graphic : getTile(x, y).getGraphics())
+				graphics.insert(graphic);
+	for(drawable* graphic : graphics)
+		graphic->draw(window);
 }
 
 void dungeon::generateDungeon() {
@@ -60,6 +64,7 @@ void dungeon::generateRooms() {
 
 		if(!failed) {
 			tileRoom(curRoom);
+			decorations::decorateRoom(curRoom, map);
 
 			rooms.push_back(curRoom);
 			attempts = 0;

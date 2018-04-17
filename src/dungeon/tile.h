@@ -20,6 +20,7 @@ public:
 		bool operator()(const drawable* lhs, const drawable* rhs) const  { return *lhs < *rhs; }
 	};
 	std::set<drawable*, drawablecompare> graphics;
+	std::set<drawable*, drawablecompare> getGraphics() { return graphics; }
 
 	bool isEmpty() { return graphics.size() == 0; }
 	void clear();

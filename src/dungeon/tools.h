@@ -5,37 +5,10 @@
 #include "dungeonparams.h"
 #include "../rendertools/drawable.h"
 #include "../rendertools/animation.h"
+#include "tile.h"
+#include "../rendertools/anchor.h"
 
-namespace decorations {
-	const int DECORATION_COUNT = 6;
-	const int ANIM_DECORATION_COUNT = 1;
-
-	enum StaticDecoration { WALL, FLOOR, BANNER };
-	enum AnimatedDecoration { TORCH };
-
-	extern void decorateRoom(tools::room area);
-
-	extern void initialize();
-
-	extern drawable* instantiate(AnimatedDecoration type);
-	extern drawable* instantiate(StaticDecoration type, int index);
-
-	class staticdecoration : public drawable {
-	public:
-		staticdecoration(sf::IntRect spriteRect, int columns, int count, int index, std::string tag, int layer);
-	};
-	class animateddecoration : public animation {
-	public:
-		animateddecoration(sf::IntRect spriteRect, int columns, int count, float animTime, std::string tag, int layer);
-	};
-
-	extern sf::IntRect rects[DECORATION_COUNT];
-	extern int columns[DECORATION_COUNT];
-	extern int counts[DECORATION_COUNT];
-	extern std::string tags[DECORATION_COUNT];
-	extern int layers[DECORATION_COUNT];
-	extern float animTimes[ANIM_DECORATION_COUNT];
-};
+#include <iostream>
 
 namespace tools {
 	struct room {
@@ -55,6 +28,38 @@ namespace tools {
 			return bufferBounds().intersects(room2.bufferBounds());
 		}
 	};
+};
+
+namespace decorations {
+	const int DECORATION_COUNT = 10;
+	const int ANIM_DECORATION_COUNT = 1;
+
+	enum StaticDecoration { WALL, FLOOR, BANNER, ALTAR, FLOOR_DECOR, CRATE, BARREL, CHAIR, TABLE };
+	enum AnimatedDecoration { TORCH };
+
+	extern void decorateRoom(const tools::room& area, std::vector<tile>& map);
+
+	extern void initialize();
+
+	extern drawable* instantiate(AnimatedDecoration type);
+	extern drawable* instantiate(StaticDecoration type, int index);
+	extern drawable* instantiate(StaticDecoration type, int index, anchor::ANCHOR anch);
+
+	class staticdecoration : public drawable {
+	public:
+		staticdecoration(sf::IntRect spriteRect, int columns, int count, int index, std::string tag, int layer);
+	};
+	class animateddecoration : public animation {
+	public:
+		animateddecoration(sf::IntRect spriteRect, int columns, int count, float animTime, std::string tag, int layer);
+	};
+
+	extern sf::IntRect rects[DECORATION_COUNT];
+	extern int columns[DECORATION_COUNT];
+	extern int counts[DECORATION_COUNT];
+	extern std::string tags[DECORATION_COUNT];
+	extern int layers[DECORATION_COUNT];
+	extern float animTimes[ANIM_DECORATION_COUNT];
 };
 
 #endif
