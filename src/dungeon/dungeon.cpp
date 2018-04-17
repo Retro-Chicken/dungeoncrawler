@@ -41,7 +41,7 @@ void dungeon::generateDungeon() {
 
 static const int MAX_ROOM_ATTEMPTS = 100;
 void dungeon::generateRooms() {
-	std::vector<room> rooms;
+	std::vector<tools::room> rooms;
 	int roomCount = rand() % (params::MAX_ROOMS - params::MIN_ROOMS) + params::MIN_ROOMS;
 	int attempts = 0;
 	while(rooms.size() < roomCount && attempts < MAX_ROOM_ATTEMPTS) {
@@ -49,7 +49,7 @@ void dungeon::generateRooms() {
 		int h = rand() % (params::MAX_ROOM_HEIGHT - params::MIN_ROOM_HEIGHT) + params::MIN_ROOM_HEIGHT;
 		int x = rand() % (params::MAP_WIDTH - w);
 		int y = rand() % (params::MAP_HEIGHT - h - 1) + 1;
-		room curRoom(x, y, w, h);
+		tools::room curRoom(x, y, w, h);
 
 		bool failed = false;
 		for(int i = 0; i < rooms.size(); i++)
@@ -60,7 +60,6 @@ void dungeon::generateRooms() {
 
 		if(!failed) {
 			tileRoom(curRoom);
-			decorateRoom(curRoom);
 
 			rooms.push_back(curRoom);
 			attempts = 0;
@@ -89,7 +88,7 @@ void dungeon::vCorridor(int y1, int y2, int x) {
 		getTile(x, y).setWalkable(true);
 	}
 }
-void dungeon::corridor(room room1, room room2) {
+void dungeon::corridor(tools::room room1, tools::room room2) {
 	hCorridor(room1.center.x, room2.center.x, room2.center.y);
 	vCorridor(room1.center.y, room2.center.y, room1.center.x);
 }
@@ -102,7 +101,7 @@ static int bottomRightCorner[] = { 4, 29, 57 };
 static int topEdge[] = { 8, 9, 10 };
 static int leftEdge[] = { 5, 6, 7 };
 static int rightEdge[] = { 14, 15, 16 };
-void dungeon::tileRoom(room area) {
+void dungeon::tileRoom(tools::room area) {
 	//	Decide whether to surround the room with stone tiles.
 	bool surroundStone = rand() % 5 == 0;
 	if(surroundStone) {
@@ -167,10 +166,6 @@ void dungeon::generateWalls() {
 			} else
 				count = 1;
 		}
-}
-
-void dungeon::decorateRoom(room area) {
-
 }
 
 void dungeon::generateDecorations() {

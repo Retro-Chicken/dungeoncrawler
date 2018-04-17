@@ -8,13 +8,17 @@
 
 namespace decorations {
 	const int DECORATION_COUNT = 6;
+	const int ANIM_DECORATION_COUNT = 1;
 
-	enum DecorationType { WALL, FLOOR, BANNER, TORCH };
+	enum StaticDecoration { WALL, FLOOR, BANNER };
+	enum AnimatedDecoration { TORCH };
+
+	extern void decorateRoom(tools::room area);
 
 	extern void initialize();
 
-	extern drawable* instantiate(DecorationType type);
-	extern drawable* instantiate(DecorationType type, int index);
+	extern drawable* instantiate(AnimatedDecoration type);
+	extern drawable* instantiate(StaticDecoration type, int index);
 
 	class staticdecoration : public drawable {
 	public:
@@ -30,10 +34,27 @@ namespace decorations {
 	extern int counts[DECORATION_COUNT];
 	extern std::string tags[DECORATION_COUNT];
 	extern int layers[DECORATION_COUNT];
+	extern float animTimes[ANIM_DECORATION_COUNT];
 };
 
 namespace tools {
+	struct room {
+		sf::IntRect interior;
+		sf::Vector2i center;
 
+		room(int x, int y, int w, int h) : interior(x, y, w, h) {
+			center.x = interior.left + interior.width/2;
+			center.y = interior.top + interior.height/2;
+		}
+		sf::IntRect bufferBounds() {
+			return sf::IntRect(interior.left - params::ROOM_BUFFER, interior.top - params::ROOM_BUFFER,
+				interior.width + 2*params::ROOM_BUFFER, interior.height + 2*params::ROOM_BUFFER);
+		}
+
+		bool intersects(room room2) {
+			return bufferBounds().intersects(room2.bufferBounds());
+		}
+	};
 };
 
 #endif
