@@ -1,14 +1,13 @@
-#include "player.h"
+#include "enemy.h"
 
-float player::speed = 200;
-sf::Texture player::charTexture[5];
-int player::ANIM_COUNT = 5;
-int player::ANIM_FRAMES = 10;
-float player::ANIM_SPEED = 0.1;
+float enemy::speed = 80;
+sf::Texture enemy::charTexture[5];
+int enemy::ANIM_COUNT = 5;
+int enemy::ANIM_FRAMES = 10;
+float enemy::ANIM_SPEED = 0.1;
 
-player::player(PlayerType pClass, Gender gender) {
+enemy::enemy(EnemyType pClass) {
 	this->pClass = pClass;
-	this->gender = gender;
 
 	charTexture[CLERIC].loadFromFile("resources/tilesets/cleric.png");
 	charTexture[WARRIOR].loadFromFile("resources/tilesets/warrior.png");
@@ -19,24 +18,24 @@ player::player(PlayerType pClass, Gender gender) {
 		animations.push_back(animation(&charTexture[pClass], sf::IntRect(0, 32*i, 32, 32), ANIM_FRAMES, ANIM_FRAMES, ANIM_SPEED*ANIM_FRAMES, anchor::ANCHOR_PLAYER));
 }
 
-player::~player() {
+enemy::~enemy() {
 
 }
 
-void player::setPosition(sf::Vector2f position) {
+void enemy::setPosition(sf::Vector2f position) {
 	this->position = position;
 }
-void player::setPosition(sf::Vector2i position) {
+void enemy::setPosition(sf::Vector2i position) {
 	this->position.x = position.x;
 	this->position.y = position.y;
 }
 
-void player::setPath(path newPath) {
+void enemy::setPath(path newPath) {
 	currentPath = newPath;
 	walkingBackwards = newPath.points[newPath.points.size()].x * config::TILE_SIZE < (int)position.x;
 }
 
-void player::update(float deltaTime) {
+void enemy::update(float deltaTime) {
 	animState = IDLE;
 	if(!currentPath.isEmpty()) {
 		animState = WALK;
@@ -56,6 +55,6 @@ void player::update(float deltaTime) {
 	animations[animState].setPosition((int)position.x, (int)position.y);
 }
 
-void player::draw(sf::RenderWindow& window) {
+void enemy::draw(sf::RenderWindow& window) {
 	animations[animState].draw(window, walkingBackwards);
 }

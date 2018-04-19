@@ -59,6 +59,7 @@ void dungeon::generateDungeon() {
 	generateRooms();
 	generateWalls();
 	generateDecorations();
+	setSpawnPoint(3);
 }
 
 static const int MAX_ROOM_ATTEMPTS = 100;

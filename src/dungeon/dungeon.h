@@ -151,7 +151,16 @@ private:
 
 	std::vector<sf::Vector2i> highlighted;
 	std::vector<sf::Color> highlightColor;
+
+	std::vector<sf::Vector2i> spawnPoints;
 public:
+	void setSpawnPoint(int spawnPointNum) {
+		while(spawnPoints.size() < spawnPointNum) {
+			sf::Vector2i temp(rand() % MAP_WIDTH, rand() % MAP_HEIGHT);
+			if(getTile(temp.x, temp.y).walkable)
+				spawnPoints.push_back(temp);
+		}
+	}
 	void addHighlighted(sf::Vector2i highlighted, sf::Color highlightColor) {
 		this->highlighted.push_back(highlighted);
 		this->highlightColor.push_back(highlightColor);

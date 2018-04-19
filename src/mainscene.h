@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "player/PlayerManager.h"
+#include "enemy/EnemyManager.h"
 #include "dungeon/dungeon.h"
 #include "scenes/Scene.h"
 
@@ -14,6 +15,7 @@ public:
 private:
 	sf::View view;
 	PlayerManager manager;
+	EnemyManager eManager;
 	dungeon* map;
 
 	void update(float deltaTime);
