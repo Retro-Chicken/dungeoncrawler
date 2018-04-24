@@ -152,8 +152,9 @@ private:
 	std::vector<sf::Vector2i> highlighted;
 	std::vector<sf::Color> highlightColor;
 
-	std::vector<sf::Vector2i> spawnPoints;
+
 public:
+	std::vector<sf::Vector2i> spawnPoints;
 	void setSpawnPoint(int spawnPointNum) {
 		while(spawnPoints.size() < spawnPointNum) {
 			sf::Vector2i temp(rand() % MAP_WIDTH, rand() % MAP_HEIGHT);

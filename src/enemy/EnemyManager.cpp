@@ -16,6 +16,9 @@ EnemyManager::~EnemyManager() {
 
 void EnemyManager::update(float deltaTime) {
 	character.update(deltaTime);
+	character.setPath(astar::aStar(dungeon::globalToLocal(character.getPosition()),
+	dungeon::globalToLocal(config::WINDOW->mapPixelToCoords(player::getPosition(*config::WINDOW))),
+	[this](int x, int y)->bool{ return !map->isWalkable(sf::Vector2i(x, y)); }));
 }
 void EnemyManager::draw(sf::RenderWindow& window) {
 	character.draw(window);

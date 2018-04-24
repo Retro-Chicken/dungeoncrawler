@@ -1,13 +1,13 @@
 #include "enemy.h"
 
-float enemy::speed = 80;
+float enemy::speed = 40;
 sf::Texture enemy::charTexture[5];
 int enemy::ANIM_COUNT = 5;
 int enemy::ANIM_FRAMES = 10;
 float enemy::ANIM_SPEED = 0.1;
 
-enemy::enemy(EnemyType pClass) {
-	this->pClass = pClass;
+enemy::enemy(EnemyType eClass) {
+	this->eClass = eClass;
 
 	charTexture[CLERIC].loadFromFile("resources/tilesets/cleric.png");
 	charTexture[WARRIOR].loadFromFile("resources/tilesets/warrior.png");
@@ -15,7 +15,7 @@ enemy::enemy(EnemyType pClass) {
 	charTexture[WIZARD].loadFromFile("resources/tilesets/wizard.png");
 	charTexture[ROGUE].loadFromFile("resources/tilesets/rogue.png");
 	for(int i = 0; i < ANIM_COUNT; i++)
-		animations.push_back(animation(&charTexture[pClass], sf::IntRect(0, 32*i, 32, 32), ANIM_FRAMES, ANIM_FRAMES, ANIM_SPEED*ANIM_FRAMES, anchor::ANCHOR_PLAYER));
+		animations.push_back(animation(&charTexture[eClass], sf::IntRect(0, 32*i, 32, 32), ANIM_FRAMES, ANIM_FRAMES, ANIM_SPEED*ANIM_FRAMES, anchor::ANCHOR_PLAYER));
 }
 
 enemy::~enemy() {
