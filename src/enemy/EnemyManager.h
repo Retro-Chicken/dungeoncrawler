@@ -4,15 +4,18 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "../dungeon/dungeon.h"
-#include "../ai/astar.h"
 #include "enemy.h"
 #include "../config.h"
+#include "../player/player.h"
+#include "../player/PlayerManager.h"
+#include "../ai/astar.h"
+#include "../ai/path.h"
 
 class EnemyManager {
 public:
-	EnemyManager(sf::RenderWindow& window);
-	EnemyManager(sf::RenderWindow& window, sf::View* view);
-	EnemyManager(sf::RenderWindow& window, sf::View* view, dungeon* map);
+	EnemyManager(sf::RenderWindow& window, PlayerManager* pManager);
+	EnemyManager(sf::RenderWindow& window, sf::View* view, PlayerManager* pManager);
+	EnemyManager(sf::RenderWindow& window, sf::View* view, dungeon* map, PlayerManager* pManager);
 	~EnemyManager();
 
 	void update(float deltaTime);
@@ -24,7 +27,8 @@ public:
 private:
 	sf::View* view;
 	dungeon* map;
-	enemy character;
+	std::vector<enemy*> enemies;
+	PlayerManager* pManager;
 };
 
 #endif

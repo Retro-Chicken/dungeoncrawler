@@ -6,16 +6,15 @@ int enemy::ANIM_COUNT = 5;
 int enemy::ANIM_FRAMES = 10;
 float enemy::ANIM_SPEED = 0.1;
 
-enemy::enemy(EnemyType eClass) {
+enemy::enemy(EnemyType eClass, EnemyVariant variant, player* target) {
 	this->eClass = eClass;
+	this->target = target;
 
-	charTexture[CLERIC].loadFromFile("resources/tilesets/cleric.png");
-	charTexture[WARRIOR].loadFromFile("resources/tilesets/warrior.png");
-	charTexture[RANGER].loadFromFile("resources/tilesets/ranger.png");
-	charTexture[WIZARD].loadFromFile("resources/tilesets/wizard.png");
-	charTexture[ROGUE].loadFromFile("resources/tilesets/rogue.png");
+	charTexture[SKELETON].loadFromFile("resources/tilesets/skeleton.png");
+	charTexture[GOBLIN].loadFromFile("resources/tilesets/goblin.png");
+	charTexture[ORC].loadFromFile("resources/tilesets/orc.png");
 	for(int i = 0; i < ANIM_COUNT; i++)
-		animations.push_back(animation(&charTexture[eClass], sf::IntRect(0, 32*i, 32, 32), ANIM_FRAMES, ANIM_FRAMES, ANIM_SPEED*ANIM_FRAMES, anchor::ANCHOR_PLAYER));
+		animations.push_back(animation(&charTexture[eClass], sf::IntRect(0, 32*i + 32*ANIM_COUNT*(eClass != SKELETON ? variant : 0), 32, 32), ANIM_FRAMES, ANIM_FRAMES, ANIM_SPEED*ANIM_FRAMES, anchor::ANCHOR_PLAYER));
 }
 
 enemy::~enemy() {
@@ -31,8 +30,11 @@ void enemy::setPosition(sf::Vector2i position) {
 }
 
 void enemy::setPath(path newPath) {
+	if(!currentPath.isEmpty() && tilesMoved <= 1) return;
+	if(newPath.points.size() <= 3) { currentPath = path(); return; }
 	currentPath = newPath;
 	walkingBackwards = newPath.points[newPath.points.size()].x * config::TILE_SIZE < (int)position.x;
+	tilesMoved = 0;
 }
 
 void enemy::update(float deltaTime) {
@@ -48,8 +50,10 @@ void enemy::update(float deltaTime) {
 			position.x = currentPath.top().x * config::TILE_SIZE;
 		if(fabs(position.y - currentPath.top().y * config::TILE_SIZE) < 1)
 			position.y = currentPath.top().y * config::TILE_SIZE;
-		if(sf::Vector2i((int)position.x, (int)position.y) == currentPath.top() * (int)config::TILE_SIZE)
+		if(sf::Vector2i((int)position.x, (int)position.y) == currentPath.top() * (int)config::TILE_SIZE) {
 			currentPath.pop();
+			tilesMoved++;
+		}
 	}
 	animations[animState].update(deltaTime);
 	animations[animState].setPosition((int)position.x, (int)position.y);

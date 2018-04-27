@@ -14,9 +14,10 @@ public:
 
 private:
 	sf::View view;
-	PlayerManager manager;
+
 	EnemyManager eManager;
 	dungeon* map;
+	PlayerManager manager;
 
 	void update(float deltaTime);
 

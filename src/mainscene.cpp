@@ -1,7 +1,7 @@
 #include "mainscene.h"
 
 mainscene::mainscene(sf::RenderWindow& window) : view(sf::FloatRect(0, 0, config::VIEW_WIDTH, config::VIEW_HEIGHT)),
-	manager(window), eManager(window) {
+	manager(window), eManager(window, &manager) {
 	map = new dungeon();
 	manager.setDungeon(map);
 	manager.setView(&view);

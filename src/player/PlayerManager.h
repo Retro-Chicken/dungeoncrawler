@@ -21,6 +21,8 @@ public:
 	void setView(sf::View* view) { this->view = view; }
 	void setDungeon(dungeon* map);
 
+	player* getPlayer() { return &character; }
+
 private:
 	sf::View* view;
 	dungeon* map;
